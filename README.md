@@ -106,7 +106,7 @@ dinov2_handcrafted|refit                     0.254      0.180      0.268       0
 <summary>📄 Abstract</summary>
 
 Forecasting when and how a cell will die would let biologists study cells while still alive, to learn why some cancer
-cells survive a drug that kills their neighbours. No existing forecast says when a cell will die while keeping cells of unknown fate. Every 30
+cells survive a drug that kills their neighbours. No existing image-based forecast says when a cell will die while keeping cells of unknown fate. Every 30
 min, DeadAhead, a fine-tuned VideoMAE with handcrafted features and a competing-risks survival head, forecasts each
 cell's death by apoptosis or lytic death within 30 to 240 min from its past two hours of quantitative phase
 video, keeping those cells. On held-out line-by-treatment groups of three prostate cell lines, it

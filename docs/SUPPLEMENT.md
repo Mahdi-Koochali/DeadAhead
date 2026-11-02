@@ -19,7 +19,7 @@ Code and supplement S1 to S8 for the paper *DeadAhead: Forecasting when and how 
 (M. Koochali, N. Khalid, A. Dengel, S. Ahmed; under review), with links to the predictions and models on Zenodo.
 
 Forecasting when and how a cell will die would let biologists study cells while still alive, to learn why some cancer
-cells survive a drug that kills their neighbours. No existing forecast says when a cell will die while keeping cells of unknown fate. Every 30
+cells survive a drug that kills their neighbours. No existing image-based forecast says when a cell will die while keeping cells of unknown fate. Every 30
 min, DeadAhead, a fine-tuned VideoMAE with handcrafted features and a competing-risks survival head, forecasts each
 cell's death by apoptosis or lytic death within 30 to 240 min from its past two hours of quantitative phase
 video, keeping those cells. On held-out line-by-treatment groups of three prostate cell lines, it
@@ -67,7 +67,7 @@ of [Figure 2](#figure-2). Recomputed by `deadahead reproduce --part table1` (AUP
 *Recomputed by `deadahead reproduce --part table1`.*
 
 **Table 1.** Macro AUPRC at 30 min over the 9 held-out groups, with DeadAhead's lead and, in brackets, the groups
-ahead (\*: meets our decision rule). Chance: the positive rate averaged over groups ([Method in brief](METHOD.md#method-in-brief)
+ahead (\*: meets our decision rule). Leads and multiples of chance use unrounded values. Chance: the positive rate averaged over groups ([Method in brief](METHOD.md#method-in-brief)
 gives it pooled). Comparator heads are refit without the untyped-death windows (for Fine-tuned DINOv2 + handcrafted, only the head).
 
 | Model | Lytic | Lead (groups ahead) | Apoptosis | Lead (groups ahead) |
@@ -121,18 +121,22 @@ DINOv2 + handcrafted with its own head and elapsed time; the match is the lytic 
 
 *Recomputed by `deadahead reproduce --part horizons`.*
 
-**Table 2.** DeadAhead's lytic forecasts at each horizon h, macro over the 9 held-out groups: prevalence (%),
-AUPRC, concordance (C), IPA, and precision (Prec.) and sensitivity (Sens.) at a training-only threshold on each horizon's
-own risk (target 0.2, achieved 0.20 to 0.26, means over groups; reference forecasts
-event-free through h). Complete-movie follow-up, whereas Table 1 labels up to the cut. Calibration slope and predicted over
-observed incidence are in [S1](#s1-fixed-horizon-forecasts).
+**Table 2.** Fixed-horizon forecasts of DeadAhead, macro over all 9 held-out groups: prevalence (%), AUPRC,
+concordance (C), IPA and its groups below zero, and at each horizon's own training-only threshold (target 0.2;
+reference forecasts followed event-free through it) the achieved rate (mean over groups), precision and sensitivity.
+Complete-movie follow-up (Table 1 labels up to the cut). Calibration slope and predicted over observed incidence are in
+[S1](#s1-fixed-horizon-forecasts).
 
-| h (min) | Prev. | AUPRC | C | IPA | Prec. | Sens. |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|
-| 30 | 2.4 | 0.321 | 0.900 | 0.031 | 0.141 | 0.777 |
-| 60 | 4.8 | 0.380 | 0.862 | 0.051 | 0.224 | 0.648 |
-| 120 | 9.6 | 0.402 | 0.821 | −0.002 | 0.339 | 0.533 |
-| 240 | 18.9 | 0.482 | 0.784 | −0.082 | 0.489 | 0.429 |
+| Route | h (min) | Prev. | AUPRC | C | IPA | Groups < 0 | Rate | Prec. | Sens. |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Lytic | 30 | 2.4 | 0.321 | 0.900 | 0.031 | 4 | 0.26 | 0.141 | 0.777 |
+| Lytic | 60 | 4.8 | 0.380 | 0.862 | 0.051 | 3 | 0.25 | 0.224 | 0.648 |
+| Lytic | 120 | 9.6 | 0.402 | 0.821 | −0.002 | 5 | 0.23 | 0.339 | 0.533 |
+| Lytic | 240 | 18.9 | 0.482 | 0.784 | −0.082 | 5 | 0.20 | 0.489 | 0.429 |
+| Apoptosis | 30 | 1.2 | 0.207 | 0.879 | −0.069 | 5 | 0.28 | 0.065 | 0.684 |
+| Apoptosis | 60 | 2.3 | 0.207 | 0.850 | −0.095 | 5 | 0.27 | 0.111 | 0.598 |
+| Apoptosis | 120 | 4.7 | 0.227 | 0.817 | −0.137 | 4 | 0.26 | 0.186 | 0.537 |
+| Apoptosis | 240 | 9.7 | 0.284 | 0.775 | −0.267 | 5 | 0.25 | 0.311 | 0.421 |
 
 ### Within each hour of imaging (post hoc)
 
@@ -211,6 +215,16 @@ survival methods.
 |---|:---:|:---:|:---:|:---:|
 | Lytic | 0.040 | 0.067 | 0.030 | −0.012 |
 | Apoptosis | −0.060 | −0.075 | −0.098 | −0.179 |
+
+**Table S1d.** DeadAhead minus DeepHit on the same fixed inputs, IPA, macro over the 9 held-out groups (groups
+ahead), from the `contrasts` block of `deadahead reproduce --part horizons`.
+
+| Horizon (min) | Lytic | Meets our rule | Apoptosis | Meets our rule |
+|---|:---:|:---:|:---:|:---:|
+| 30 | +0.232 (9 of 9) | yes | +0.282 (9 of 9) | yes |
+| 60 | +0.224 (9 of 9) | yes | +0.251 (9 of 9) | yes |
+| 120 | +0.162 (8 of 9) | yes | +0.186 (8 of 9) | yes |
+| 240 | +0.044 (7 of 9) | yes | +0.071 (6 of 9) | no |
 
 ### S2. Per-group differences
 
@@ -383,6 +397,16 @@ the alarm score) and `--part sensitivity` (follow-up inside the cut).*
 | DeadAhead minus DeepHit | +0.007 (5 of 9) | no | +0.026 (7 of 9) | yes |
 | DeadAhead minus Fine-tuned DINOv2 + handcrafted | +0.106 (9 of 9) | yes | +0.083 (8 of 9) | yes |
 | Same survival head and handcrafted features (fixed-horizon forecasts): VideoMAE features minus DINOv2 features | +0.079 (9 of 9) | yes | +0.069 (8 of 9) | yes |
+
+**Table S5c.** With the same survival head and handcrafted features, VideoMAE features minus DINOv2 features, macro AUPRC at
+each horizon (groups ahead), from the `contrasts` block of `deadahead reproduce --part horizons`.
+
+| Horizon (min) | Lytic | Meets our rule | Apoptosis | Meets our rule |
+|---|:---:|:---:|:---:|:---:|
+| 30 | +0.079 (9 of 9) | yes | +0.069 (8 of 9) | yes |
+| 60 | +0.088 (7 of 9) | yes | +0.067 (9 of 9) | yes |
+| 120 | +0.055 (6 of 9) | no | +0.048 (8 of 9) | yes |
+| 240 | +0.021 (5 of 9) | no | +0.029 (8 of 9) | yes |
 
 The DINOv2 comparison does not isolate temporal modelling: those DINOv2 features saw no labels, the DINOv2 baselines embed
 9 single frames against VideoMAE's 16-frame clip, and Fine-tuned DINOv2 tuned only two blocks and the final norm with one fixed
