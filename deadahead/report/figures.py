@@ -1,4 +1,4 @@
-"""Figures for the README: the warning curves of Figure 2, the overview of Table 1, the figures of S1, S2 and S4 and
+"""Figures for the supplement: the warning curves of Figure 2, the overview of Table 1, the figures of S1, S2 and S4 and
 the post hoc figures of S8.
 
 Each method keeps one line style and one marker in every figure, and position or marker carries every other identity,
@@ -498,7 +498,7 @@ def draw_from_bundle(bundle_dir: Path, out_dir: Path) -> list[str]:
 
 
 def main_all(argv=None) -> int:
-    ap = argparse.ArgumentParser(description="Draw every figure of the README from the reproduce output, with the "
+    ap = argparse.ArgumentParser(description="Draw every figure of the supplement from the reproduce output, with the "
                                              "plotted values as CSV files in <out-dir>/data/.")
     ap.add_argument("results", type=Path, nargs="?", default=None,
                     help="the JSON of deadahead reproduce --part all (default: <runs>/reproduce/all.json)")

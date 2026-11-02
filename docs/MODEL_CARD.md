@@ -27,7 +27,7 @@ commercial use.
 [CellDeathDetect](DATA.md#celldeathdetect) (Vicar et al., 2020; doi:10.5281/zenodo.2601562, CC BY 4.0): 63 quantitative phase
 movies of PNT1A, DU145 and LNCaP cells under three treatments. Each model trained on eight groups and held out the ninth;
 one setting was chosen on an inner training group. VideoMAE started from `MCG-NJU/videomae-large` (Tong et al., 2022),
-pretrained without labels on Kinetics-400. The [method](../README.md#method-in-brief) gives every step.
+pretrained without labels on Kinetics-400. The [method](METHOD.md#method-in-brief) gives every step.
 
 ## Metrics
 
@@ -35,13 +35,13 @@ Held-out groups, mean over the 9 groups. DeadAhead's alarm thresholds were set o
 
 | Measure | Lytic death | Apoptosis | Details |
 |---|:---:|:---:|---|
-| Macro AUPRC at 30 min | 0.322 | 0.213 | [Table 1](../README.md#table-1) |
-| Chance | 0.024 | 0.012 | [Table 1](../README.md#table-1) |
-| Deaths warned 60 min ahead, target 0.2 | 66.2% (achieved rate 0.24) | 62.1% (achieved rate 0.24) | [Figure 2](../README.md#figure-2), [S3](../README.md#s3-warnings-in-detail) |
+| Macro AUPRC at 30 min | 0.322 | 0.213 | [Table 1](SUPPLEMENT.md#table-1) |
+| Chance | 0.024 | 0.012 | [Table 1](SUPPLEMENT.md#table-1) |
+| Deaths warned 60 min ahead, target 0.2 | 66.2% (achieved rate 0.24) | 62.1% (achieved rate 0.24) | [Figure 2](SUPPLEMENT.md#figure-2), [S3](SUPPLEMENT.md#s3-warnings-in-detail) |
 
-Every horizon is in [S1](../README.md#s1-fixed-horizon-forecasts), every group in [S2](../README.md#s2-per-group-differences).
+Every horizon is in [S1](SUPPLEMENT.md#s1-fixed-horizon-forecasts), every group in [S2](SUPPLEMENT.md#s2-per-group-differences).
 One command recomputes each number from the released predictions: see the
-[claim table](../README.md#which-command-checks-which-claim).
+[claim table](REPRODUCE.md#which-command-checks-which-claim).
 
 ## Limits
 
@@ -50,7 +50,7 @@ One command recomputes each number from the released predictions: see the
   another treatment or line.
 - Crops are centred on the dataset's curated outlines, seeded from Hoechst-stained nuclei. Use with other segmentations is
   untested.
-- The probabilities rank well but need recalibration before use as risks ([S1](../README.md#s1-fixed-horizon-forecasts)).
+- The probabilities rank well but need recalibration before use as risks ([S1](SUPPLEMENT.md#s1-fixed-horizon-forecasts)).
 - The 216 cross-fitted inner boosters behind the alarm thresholds are not released; the predictions bundle holds their
   predictions.
 

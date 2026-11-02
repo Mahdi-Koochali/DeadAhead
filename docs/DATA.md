@@ -87,4 +87,4 @@ the bundle against its `MANIFEST.json` and returns 3 on a mismatch; `--no-verify
 ## The predictions bundle
 
 To recompute the paper's results without the raw data, download the predictions bundle (CC BY 4.0, listed in
-[`WEIGHTS.md`](WEIGHTS.md)), unzip it into `$DEADAHEAD_DATA` (it creates `bundle/`), and run `deadahead reproduce --part all` (see the README).
+[`WEIGHTS.md`](WEIGHTS.md)), unzip it into `$DEADAHEAD_DATA` (it creates `bundle/`), and run `deadahead reproduce --part all` (see [`REPRODUCE.md`](REPRODUCE.md)).

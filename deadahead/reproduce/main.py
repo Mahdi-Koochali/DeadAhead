@@ -197,7 +197,7 @@ def main(argv=None) -> int:
         print(f"error: {e}", file=sys.stderr)
         if not (bundle_dir / "MANIFEST.json").is_file():
             print(f"download deadahead_bundle_v1.zip and unzip it into {bundle_dir.parent} "
-                  "(README, Check it in 5 minutes)", file=sys.stderr)
+                  "(docs/REPRODUCE.md, Check it in 5 minutes)", file=sys.stderr)
         return 3
     parts = available_parts(bundle) if a.part == "all" else (a.part,)
     skipped = [p for p in PARTS if p not in parts] if a.part == "all" else []

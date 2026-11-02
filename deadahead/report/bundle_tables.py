@@ -1,6 +1,6 @@
-"""Tables of the README read from the predictions bundle, not from the reproduce output: the weight of each outcome in
-the training rows, and two post hoc views of the warnings (the alarm share per 30-min bin before death, the match group
-by group)."""
+"""Tables of the supplement read from the predictions bundle, not from the reproduce output: the weight of each outcome
+in the training rows, and two post hoc views of the warnings (the alarm share per 30-min bin before death, the match
+group by group)."""
 
 from __future__ import annotations
 

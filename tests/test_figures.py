@@ -1,5 +1,5 @@
-"""The README's figures: their tables from the reproduce output, the drawing and the plot-figures command, and the
-tables read from the predictions bundle, on synthetic inputs."""
+"""The figures of the supplement: their tables from the reproduce output, the drawing and the plot-figures command, and
+the tables read from the predictions bundle, on synthetic inputs."""
 
 from fractions import Fraction
 from pathlib import Path

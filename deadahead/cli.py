@@ -36,7 +36,7 @@ COMMANDS = {
     "yeast-rules": ("deadahead.yeast.rules", "yeast probe: the simple rules (labels, brightness, size) on each held-out position"),
     "yeast-score": ("deadahead.yeast.score", "yeast probe: recompute every score from the yeast bundle"),
     "reproduce": ("deadahead.reproduce.main", "recompute the paper's results from the predictions bundle"),
-    "plot-figures": ("deadahead.report.figures:main_all", "draw every figure of the README from the reproduce output"),
+    "plot-figures": ("deadahead.report.figures:main_all", "draw every figure of the supplement from the reproduce output"),
     "plot-warnings": ("deadahead.report.figures", "draw Fig. 2 from the warnings table with its spread"),
     "plot-gap-window": ("deadahead.report.figures:main_gap_window", "draw the post hoc window figure of S8"),
     "plot-alarm-rate": ("deadahead.report.figures:main_alarm_rate", "draw the post hoc alarm-rate figure of S8"),
