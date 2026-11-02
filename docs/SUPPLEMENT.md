@@ -297,7 +297,7 @@ reference forecasts raise an alarm (reference time only, not the burden over all
 over the groups; each reference forecast counts 0.5 cell-hour, so the share is half the rate. As means over the groups, the
 rate is 0.29 and the share 14.5%, the grey line of [Figure S8c](#s8-post-hoc-analyses). Achieved rates
 differ from the target and across groups (lytic, at 0.2: 0.02 to 0.58), as the alarm
-thresholds come from heads trained on seven groups and scored on the eighth, and the encoder had seen them all. Even at a
+thresholds come from heads trained on seven groups and scored on the eighth, and the encoder had seen all eight. Even at a
 higher achieved rate (0.41 against 0.24), elapsed time covered the final hour before fewer lytic
 deaths (21.2% against 66.2%).
 
