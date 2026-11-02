@@ -1,0 +1,51 @@
+# For reference only: the code uses the constants in deadahead/evaluation and deadahead/reproduce.
+# Evaluation protocol of Table 1, the warnings and the supplementary results; changing a value here does not
+# change the code (tests/test_metrics.py, tests/test_image_warnings_reproduce.py and tests/test_post_hoc_reproduce.py
+# check that they agree).
+
+groups: [DU145_bp, DU145_do, DU145_st, LNCaP_bp, LNCaP_do, LNCaP_st, PNT1A_bp, PNT1A_do, PNT1A_st]
+seeds: [2601562, 2601563, 2601564]
+causes: [APOPTOSIS, LYTIC]
+table1:
+  horizon_min: 30                # AUPRC of the 30-min forecast over P, Q, N (U excluded)
+  eight_fold_print_without: PNT1A_bp
+decision_rule:
+  margin: 0.02                   # |macro difference| at least this
+  count: 7                       # with the same sign in at least this many of the 9 groups
+  min_groups: 7                  # fewer groups on both sides: not scorable
+warnings:
+  score_horizon_min: 30          # the warning score is F_c(30)
+  follow_min: 240                # reference rows: no death and followed through the next 240 min
+  row_hours: 0.5                 # each reference row stands for 0.5 cell-hour
+  nominal_alpha:                 # alarmed fraction of reference rows; per cell-hour = alpha / 0.5
+    0.2_per_cell_hour: 0.1
+    0.4_per_cell_hour: 0.2
+  sustained_x_min: [30, 60, 90, 120, 180, 240]
+  cut_frame: 438
+  minutes_per_frame: 3.0
+  elapsed_time_tie_seed: 2601562
+horizons:
+  horizons_min: [30, 60, 120, 240]
+  positivity_min_g: 0.25         # a horizon where the censoring survivor G falls below this is not scored
+image_warnings:
+  method: dinov2_handcrafted|refit       # the image baseline, under the same training-only thresholds as DeadAhead
+  inner_heads_per_outer_unit: 8          # one cross-fitted head per training group, per held-out group and seed
+  last_hour_x_min: 60                    # the sustained coverage the paper quotes
+gap:
+  early_min: 60                          # E: the cell died within 60 min (left out)
+  late_min: 120                          # P: a death of the cause 60 to 120 min ahead
+  methods: [deadahead, dinov2_handcrafted_survival, handcrafted_survival, deephit, elapsed_time]
+sensitivity:
+  table1_window_end_frame: 438           # Table 1 on the rows with t + 10 <= 438 (the 30-min window inside the cut)
+  landmark_cut_frame: 358                # warnings on the rows t <= 358, follow-up truncated at frame 438
+gap_window:                              # post hoc: forecasts whose cell died within g min left out
+  gaps_min:                              # {horizon H: gaps g}; H = 120 primary, H = 240 secondary
+    120: [0, 30, 60, 90]
+    240: [0, 30, 60, 90, 120]
+  methods: [deadahead, dinov2_handcrafted_survival, elapsed_time]
+alarm_rate:                              # post hoc: thresholds as in warnings, only the target rate changed
+  sweep_step: 0.05
+  sweep_max: 0.8
+  grid_step: 0.005                       # the grid of the matched comparison
+  grid_max: 0.8
+  methods: [deadahead, dinov2_handcrafted|refit, elapsed_time]

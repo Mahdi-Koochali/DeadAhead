@@ -1,0 +1,12 @@
+# Read by deadahead/survival (config.head_config); frames.py holds the same values as constants
+# (tests/test_survival_head.py checks that they agree).
+# The DeadAhead survival head (deadahead/survival/head.py) and the landmarks it is fitted on.
+
+survival_grid:
+  bin_frames: 10                 # 30 min per bin, the landmark step
+  n_bins: 8                      # 8 x 30 min = 240 min, the longest horizon
+
+protocol:
+  panel: primary_439                         # landmarks of the movies truncated at frame 439
+  morphology_excluded_movies: [DU145_st_2]   # left out of the primary panel, kept in the all_movies panel
+  seeds: [2601562, 2601563, 2601564]         # one head per held-out group and seed

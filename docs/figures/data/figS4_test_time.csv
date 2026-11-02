@@ -1,0 +1,83 @@
+route,name,group,auprc
+LYTIC,Chance,macro,0.024071
+LYTIC,Intact,DU145 bp,0.270292
+LYTIC,Intact,DU145 do,0.549964
+LYTIC,Intact,DU145 st,0.123715
+LYTIC,Intact,LNCaP bp,0.167070
+LYTIC,Intact,LNCaP do,0.266243
+LYTIC,Intact,LNCaP st,0.106950
+LYTIC,Intact,PNT1A bp,0.348738
+LYTIC,Intact,PNT1A do,0.431805
+LYTIC,Intact,PNT1A st,0.601154
+LYTIC,Intact,macro,0.318437
+LYTIC,Cell hidden,DU145 bp,0.103877
+LYTIC,Cell hidden,DU145 do,0.083698
+LYTIC,Cell hidden,DU145 st,0.050295
+LYTIC,Cell hidden,LNCaP bp,0.048873
+LYTIC,Cell hidden,LNCaP do,0.039033
+LYTIC,Cell hidden,LNCaP st,0.036118
+LYTIC,Cell hidden,PNT1A bp,0.063303
+LYTIC,Cell hidden,PNT1A do,0.055695
+LYTIC,Cell hidden,PNT1A st,0.226217
+LYTIC,Cell hidden,macro,0.078568
+LYTIC,Frames shuffled,DU145 bp,0.095156
+LYTIC,Frames shuffled,DU145 do,0.159049
+LYTIC,Frames shuffled,DU145 st,0.053472
+LYTIC,Frames shuffled,LNCaP bp,0.045168
+LYTIC,Frames shuffled,LNCaP do,0.068608
+LYTIC,Frames shuffled,LNCaP st,0.033427
+LYTIC,Frames shuffled,PNT1A bp,0.089410
+LYTIC,Frames shuffled,PNT1A do,0.140420
+LYTIC,Frames shuffled,PNT1A st,0.303912
+LYTIC,Frames shuffled,macro,0.109847
+LYTIC,Last frame repeated,DU145 bp,0.035325
+LYTIC,Last frame repeated,DU145 do,0.020972
+LYTIC,Last frame repeated,DU145 st,0.022421
+LYTIC,Last frame repeated,LNCaP bp,0.073611
+LYTIC,Last frame repeated,LNCaP do,0.048422
+LYTIC,Last frame repeated,LNCaP st,0.025701
+LYTIC,Last frame repeated,PNT1A bp,0.107598
+LYTIC,Last frame repeated,PNT1A do,0.055630
+LYTIC,Last frame repeated,PNT1A st,0.161261
+LYTIC,Last frame repeated,macro,0.061216
+APOPTOSIS,Chance,macro,0.011592
+APOPTOSIS,Intact,DU145 bp,0.117846
+APOPTOSIS,Intact,DU145 do,0.260240
+APOPTOSIS,Intact,DU145 st,0.082648
+APOPTOSIS,Intact,LNCaP bp,0.129794
+APOPTOSIS,Intact,LNCaP do,0.150484
+APOPTOSIS,Intact,LNCaP st,0.143828
+APOPTOSIS,Intact,PNT1A bp,0.296545
+APOPTOSIS,Intact,PNT1A do,0.315800
+APOPTOSIS,Intact,PNT1A st,0.210732
+APOPTOSIS,Intact,macro,0.189769
+APOPTOSIS,Cell hidden,DU145 bp,0.024139
+APOPTOSIS,Cell hidden,DU145 do,0.005438
+APOPTOSIS,Cell hidden,DU145 st,0.035698
+APOPTOSIS,Cell hidden,LNCaP bp,0.023191
+APOPTOSIS,Cell hidden,LNCaP do,0.046657
+APOPTOSIS,Cell hidden,LNCaP st,0.058582
+APOPTOSIS,Cell hidden,PNT1A bp,0.082644
+APOPTOSIS,Cell hidden,PNT1A do,0.016190
+APOPTOSIS,Cell hidden,PNT1A st,0.062721
+APOPTOSIS,Cell hidden,macro,0.039473
+APOPTOSIS,Frames shuffled,DU145 bp,0.042832
+APOPTOSIS,Frames shuffled,DU145 do,0.018788
+APOPTOSIS,Frames shuffled,DU145 st,0.058649
+APOPTOSIS,Frames shuffled,LNCaP bp,0.052724
+APOPTOSIS,Frames shuffled,LNCaP do,0.095555
+APOPTOSIS,Frames shuffled,LNCaP st,0.072467
+APOPTOSIS,Frames shuffled,PNT1A bp,0.168595
+APOPTOSIS,Frames shuffled,PNT1A do,0.039256
+APOPTOSIS,Frames shuffled,PNT1A st,0.022573
+APOPTOSIS,Frames shuffled,macro,0.063493
+APOPTOSIS,Last frame repeated,DU145 bp,0.010292
+APOPTOSIS,Last frame repeated,DU145 do,0.091253
+APOPTOSIS,Last frame repeated,DU145 st,0.054469
+APOPTOSIS,Last frame repeated,LNCaP bp,0.031051
+APOPTOSIS,Last frame repeated,LNCaP do,0.053238
+APOPTOSIS,Last frame repeated,LNCaP st,0.047953
+APOPTOSIS,Last frame repeated,PNT1A bp,0.083169
+APOPTOSIS,Last frame repeated,PNT1A do,0.023670
+APOPTOSIS,Last frame repeated,PNT1A st,0.027209
+APOPTOSIS,Last frame repeated,macro,0.046923

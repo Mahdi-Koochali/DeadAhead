@@ -1,0 +1,13 @@
+# CPU environment used for the survival head, evaluation and reproduction (Python 3.12)
+numpy==2.5.2
+pandas==3.0.5
+pyarrow==25.0.1
+scipy==1.18.0
+scikit-image==0.26.0
+tifffile==2026.8.16
+imagecodecs==2026.8.16
+openpyxl==3.1.5
+PyYAML==6.0.3
+lightgbm==4.7.0
+matplotlib==3.11.1
+pytest==9.1.1

@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deadahead"
+version = "1.0.0"
+description = "DeadAhead: forecasting when and how a cell will die from quantitative phase video"
+readme = "README.md"
+authors = [
+  {name = "Mohammadmahdi Koochali"},
+  {name = "Nabeel Khalid"},
+  {name = "Andreas Dengel"},
+  {name = "Sheraz Ahmed"},
+]
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+dependencies = [
+  "numpy",
+  "pandas",
+  "pyarrow",
+  "scipy",
+  "scikit-image",
+  "tifffile",
+  "imagecodecs",
+  "openpyxl",
+  "pyyaml",
+  "lightgbm==4.7.0",
+  "matplotlib",
+]
+
+[project.optional-dependencies]
+# the tested set (environment/gpu-py310.txt): newer transformers turns PyTorch 2.5 off
+video = ["torch==2.5.1", "transformers==5.15.1", "safetensors==0.8.0", "huggingface_hub==1.28.0"]
+dev = ["pytest", "ruff==0.17.3"]
+
+[project.urls]
+Homepage = "https://github.com/Mahdi-Koochali/DeadAhead"
+Repository = "https://github.com/Mahdi-Koochali/DeadAhead"
+
+[project.scripts]
+deadahead = "deadahead.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["deadahead*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["torch: needs PyTorch", "data: needs the downloaded data or bundle"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E9", "F"]

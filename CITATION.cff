@@ -1,0 +1,50 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the paper."
+title: "DeadAhead: Forecasting when and how a cell will die from quantitative phase video"
+version: 1.0.0
+date-released: 2026-11-02
+license: MIT
+repository-code: "https://github.com/Mahdi-Koochali/DeadAhead"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.23883611"
+    description: "The predictions bundle behind the results"
+authors:
+  - family-names: Koochali
+    given-names: Mohammadmahdi
+    orcid: "https://orcid.org/0000-0001-8780-253X"
+    affiliation: "German Research Center for Artificial Intelligence (DFKI) GmbH; RPTU Kaiserslautern-Landau"
+  - family-names: Khalid
+    given-names: Nabeel
+    orcid: "https://orcid.org/0000-0001-9274-3757"
+    affiliation: "German Research Center for Artificial Intelligence (DFKI) GmbH; RPTU Kaiserslautern-Landau"
+  - family-names: Dengel
+    given-names: Andreas
+    orcid: "https://orcid.org/0000-0002-4239-6520"
+    affiliation: "German Research Center for Artificial Intelligence (DFKI) GmbH; RPTU Kaiserslautern-Landau"
+  - family-names: Ahmed
+    given-names: Sheraz
+    orcid: "https://orcid.org/0000-0002-6100-8255"
+    affiliation: "German Research Center for Artificial Intelligence (DFKI) GmbH"
+preferred-citation:
+  type: unpublished
+  title: "DeadAhead: Forecasting when and how a cell will die from quantitative phase video"
+  authors:
+    - family-names: Koochali
+      given-names: Mohammadmahdi
+      orcid: "https://orcid.org/0000-0001-8780-253X"
+      affiliation: "German Research Center for Artificial Intelligence (DFKI) GmbH; RPTU Kaiserslautern-Landau"
+    - family-names: Khalid
+      given-names: Nabeel
+      orcid: "https://orcid.org/0000-0001-9274-3757"
+      affiliation: "German Research Center for Artificial Intelligence (DFKI) GmbH; RPTU Kaiserslautern-Landau"
+    - family-names: Dengel
+      given-names: Andreas
+      orcid: "https://orcid.org/0000-0002-4239-6520"
+      affiliation: "German Research Center for Artificial Intelligence (DFKI) GmbH; RPTU Kaiserslautern-Landau"
+    - family-names: Ahmed
+      given-names: Sheraz
+      orcid: "https://orcid.org/0000-0002-6100-8255"
+      affiliation: "German Research Center for Artificial Intelligence (DFKI) GmbH"
+  year: 2026
+  notes: "Under review"

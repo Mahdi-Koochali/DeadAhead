@@ -1,0 +1,120 @@
+# For reference only: the code uses the constants in deadahead/baselines.
+# Recipes of the comparison methods of Table 1 and of the same-head and DeepHit comparisons
+# (tests/test_baselines_heads.py, tests/test_baselines_deephit.py and tests/test_baselines_dinov2.py check them against
+# the constants).
+
+dinov2:                         # DINOv2 ViT-B/14 baselines (deadahead/baselines/dinov2_*.py hold the same values as constants)
+  hub:
+    repo: facebookresearch/dinov2
+    commit: 7764ea0f912e53c92e82eb78a2a1631e92725fc8
+    entry_point: dinov2_vitb14                # LVD-142M weights dinov2_vitb14_pretrain.pth
+    weights_sha256: 0b8b82f85de91b424aded121c7e1dcc2b7bc6d0adeea651bf73a13307fad8c73
+    embed_dim: 768
+  crops:
+    store: crops/frames128                    # deadahead video-crops --stride 5 --out-dir <data>/crops/frames128
+    size_px: 128
+    stride_frames: 5
+  phase_map: {lo: -0.3, hi: 4.0, curve: "log1p(9 * clip((x - lo) / (hi - lo), 0, 1)) / ln 10"}
+  input: {res: 224, channels: "grey repeated to 3", normalisation: ImageNet mean and std}
+  adapt:                                      # without labels, one encoder per held-out group
+    pool:
+      groups: the eight training groups (the held-out group contributes no pixel)
+      frames_per_movie: 15                    # evenly spaced over the movie
+      tiles: 60000                            # shared evenly over the training movies (59,640 with 56 movies)
+      tile_side_px: [96, 260]                 # random side in [96, 260) at a random position
+      resize_px: 128                          # 8-bit bilinear
+      seed: 2601562
+    objective: NT-Xent (SimCLR), temperature 0.2, two augmented views per tile
+    projection_head: [768, 512, 128]          # GELU, L2-normalised output
+    tuned: last 2 transformer blocks and the final norm
+    steps: 6000
+    batch: 128
+    optimiser: AdamW
+    lr: 1.0e-5
+    weight_decay: 0.05
+    seed: 2601562                             # augmentation generator; batch draws use seed + 1
+    precision: bf16 autocast on CUDA compute capability 8.0 or newer, else fp16; a loss scaler on CUDA, none on the CPU
+    augmentation: resized crop 50-100 %, flips, 90-degree rotation, 5x5 blur on half, intensity scale 1 +- 0.075, shift +- 0.03
+  finetune:                                   # on the death labels, one encoder per held-out group, from the pretrained encoder
+    horizon_min: 30
+    rows: landmarks of the primary panel outside the held-out group whose 30-min outcome is known in the complete movie
+    classes: [NONE, APOPTOSIS, LYTIC]
+    head: linear 768 -> 3
+    loss: class-weighted cross-entropy x window weight, divided by the summed window weight of the batch
+    class_weights: sum(n) / (3 * n_c)
+    tuned: last 2 transformer blocks and the final norm
+    steps: 6000
+    batch: 128
+    optimiser: AdamW
+    lr: 1.0e-5
+    weight_decay: 0.05
+    seed: 2601562
+    augmentation: as adapt
+  embed:
+    batch: 256
+    output: per movie <movie>.npy float16 (N, 768) and <movie>.parquet (cell_num, frame_index, row), every movie by each fold's encoder
+    stores: {adapted: runs/dinov2/embeddings/<fold>, finetuned: runs/dinov2_finetuned/embeddings/<fold>}
+
+heads:                                   # deadahead/baselines/heads.py
+  methods:                               # method: (embedding store, inputs)
+    handcrafted: [null, handcrafted]     # the 112 handcrafted history features
+    dinov2: [dinov2, dino]               # pooled DINOv2 embeddings, 3 x 768
+    dinov2_handcrafted: [dinov2, both]   # both blocks, embeddings first
+    dinov2_finetuned_handcrafted: [dinov2_finetuned, both]
+  pooling:                               # 9 single frames over the past 120 min: t - 40, t - 35, ..., t
+    n_timesteps: 9
+    stride_frames: 5                     # pooled as last, mean and change (last - first); a missing crop is zeros
+  horizon_min: 30
+  rows: primary_439 panel, label != CENSORED_IN_HORIZON, DU145_st_2 left out
+  target: label == cause, one binary head per cause; the other cause and no event are negatives
+  weight: window_weight
+  policies: [refit, original]            # refit (Table 1): training rows labelled UNTYPED_DEATH left out of training
+  seeds: [2601562, 2601563, 2601564]
+  lightgbm:                              # fixed, no early stopping; 16 threads for the released predictions
+    objective: binary
+    learning_rate: 0.05
+    num_leaves: 31
+    min_data_in_leaf: 100
+    feature_fraction: 0.3
+    bagging_fraction: 0.8
+    bagging_freq: 1
+    verbose: -1
+  rounds: 300
+
+dinov2_survival:                         # deadahead/baselines/dinov2_survival.py: DeadAhead's survival head
+  inputs: pooled DINOv2 (2,304) then the 112 handcrafted features, plus the bin index
+  width: 2417
+  store: dinov2                          # the encoder adapted without the held-out group
+  untyped: censor_at_death
+  threads: 8
+
+deephit:                                 # deadahead/baselines/deephit.py
+  inputs: DeadAhead's (1,024 fine-tuned VideoMAE features of the same group and seed, then the 112 handcrafted)
+  targets: last 30-min bin at risk L (0..8) and cause (0 none, 1 apoptosis, 2 lytic); an untyped death ends follow-up
+  l0_rows: not trained on (no likelihood term); predicted
+  network:
+    shared: [256, 256]                   # Linear-ReLU-Dropout twice
+    per_cause: 128                       # on [shared output, input]
+    dropout: 0.1
+    outputs: 17                          # 2 causes x 8 bins + no typed death by 240 min
+  loss: alpha * weighted NLL + (1 - alpha) * rank loss (pycox competing risks)
+  standardise: median imputation, mean and SD of the fit's own training rows
+  optimiser: Adam, weight decay 0
+  batch: 512
+  grid:                                  # (alpha, sigma, lr), in this order; ties go to the earlier setting
+    - [0.2, 0.1, 1.0e-4]
+    - [0.2, 0.1, 1.0e-3]
+    - [0.2, 1.0, 1.0e-4]
+    - [0.2, 1.0, 1.0e-3]
+    - [0.5, 0.1, 1.0e-4]
+    - [0.5, 0.1, 1.0e-3]
+    - [0.5, 1.0, 1.0e-4]
+    - [0.5, 1.0, 1.0e-3]
+  selection:
+    group: training group with the most lytic 30-min rows (as for VideoMAE)
+    max_epochs: 100
+    patience: 10                         # epochs since the best inner loss
+    score: mean AUPRC over 2 causes x horizons of 1, 2, 4 and 8 bins on the inner group
+  final: chosen setting refit on the eight training groups for exactly its best epoch count
+  numpy_shuffle_generator: [seed, 7]
+  threads: 8

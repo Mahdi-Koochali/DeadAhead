@@ -1,0 +1,163 @@
+route,name,group,auprc
+LYTIC,Chance,macro,0.024071
+LYTIC,Elapsed time,DU145 bp,0.021395
+LYTIC,Elapsed time,DU145 do,0.010113
+LYTIC,Elapsed time,DU145 st,0.006066
+LYTIC,Elapsed time,LNCaP bp,0.038766
+LYTIC,Elapsed time,LNCaP do,0.006456
+LYTIC,Elapsed time,LNCaP st,0.013198
+LYTIC,Elapsed time,PNT1A bp,0.033599
+LYTIC,Elapsed time,PNT1A do,0.012338
+LYTIC,Elapsed time,PNT1A st,0.037787
+LYTIC,Elapsed time,macro,0.019969
+LYTIC,DeadAhead (ours),DU145 bp,0.274629
+LYTIC,DeadAhead (ours),DU145 do,0.547536
+LYTIC,DeadAhead (ours),DU145 st,0.155701
+LYTIC,DeadAhead (ours),LNCaP bp,0.200439
+LYTIC,DeadAhead (ours),LNCaP do,0.281311
+LYTIC,DeadAhead (ours),LNCaP st,0.103264
+LYTIC,DeadAhead (ours),PNT1A bp,0.310122
+LYTIC,DeadAhead (ours),PNT1A do,0.441543
+LYTIC,DeadAhead (ours),PNT1A st,0.585737
+LYTIC,DeadAhead (ours),macro,0.322253
+LYTIC,VideoMAE (fine-tuned; ours),DU145 bp,0.270292
+LYTIC,VideoMAE (fine-tuned; ours),DU145 do,0.549964
+LYTIC,VideoMAE (fine-tuned; ours),DU145 st,0.123715
+LYTIC,VideoMAE (fine-tuned; ours),LNCaP bp,0.167070
+LYTIC,VideoMAE (fine-tuned; ours),LNCaP do,0.266243
+LYTIC,VideoMAE (fine-tuned; ours),LNCaP st,0.106950
+LYTIC,VideoMAE (fine-tuned; ours),PNT1A bp,0.348738
+LYTIC,VideoMAE (fine-tuned; ours),PNT1A do,0.431805
+LYTIC,VideoMAE (fine-tuned; ours),PNT1A st,0.601154
+LYTIC,VideoMAE (fine-tuned; ours),macro,0.318437
+LYTIC,DeepHit,DU145 bp,0.278402
+LYTIC,DeepHit,DU145 do,0.551283
+LYTIC,DeepHit,DU145 st,0.139563
+LYTIC,DeepHit,LNCaP bp,0.211322
+LYTIC,DeepHit,LNCaP do,0.235629
+LYTIC,DeepHit,LNCaP st,0.095626
+LYTIC,DeepHit,PNT1A bp,0.308549
+LYTIC,DeepHit,PNT1A do,0.416560
+LYTIC,DeepHit,PNT1A st,0.599792
+LYTIC,DeepHit,macro,0.315192
+LYTIC,DINOv2 + handcrafted,DU145 bp,0.157437
+LYTIC,DINOv2 + handcrafted,DU145 do,0.464894
+LYTIC,DINOv2 + handcrafted,DU145 st,0.214845
+LYTIC,DINOv2 + handcrafted,LNCaP bp,0.151328
+LYTIC,DINOv2 + handcrafted,LNCaP do,0.263844
+LYTIC,DINOv2 + handcrafted,LNCaP st,0.065790
+LYTIC,DINOv2 + handcrafted,PNT1A bp,0.138149
+LYTIC,DINOv2 + handcrafted,PNT1A do,0.373236
+LYTIC,DINOv2 + handcrafted,PNT1A st,0.455390
+LYTIC,DINOv2 + handcrafted,macro,0.253879
+LYTIC,Fine-tuned DINOv2 + handcrafted,DU145 bp,0.199449
+LYTIC,Fine-tuned DINOv2 + handcrafted,DU145 do,0.282368
+LYTIC,Fine-tuned DINOv2 + handcrafted,DU145 st,0.075530
+LYTIC,Fine-tuned DINOv2 + handcrafted,LNCaP bp,0.166021
+LYTIC,Fine-tuned DINOv2 + handcrafted,LNCaP do,0.219929
+LYTIC,Fine-tuned DINOv2 + handcrafted,LNCaP st,0.082845
+LYTIC,Fine-tuned DINOv2 + handcrafted,PNT1A bp,0.148164
+LYTIC,Fine-tuned DINOv2 + handcrafted,PNT1A do,0.340427
+LYTIC,Fine-tuned DINOv2 + handcrafted,PNT1A st,0.434327
+LYTIC,Fine-tuned DINOv2 + handcrafted,macro,0.216562
+LYTIC,Handcrafted,DU145 bp,0.196611
+LYTIC,Handcrafted,DU145 do,0.305720
+LYTIC,Handcrafted,DU145 st,0.160522
+LYTIC,Handcrafted,LNCaP bp,0.100186
+LYTIC,Handcrafted,LNCaP do,0.219515
+LYTIC,Handcrafted,LNCaP st,0.120216
+LYTIC,Handcrafted,PNT1A bp,0.164572
+LYTIC,Handcrafted,PNT1A do,0.268100
+LYTIC,Handcrafted,PNT1A st,0.406068
+LYTIC,Handcrafted,macro,0.215723
+LYTIC,DINOv2,DU145 bp,0.086868
+LYTIC,DINOv2,DU145 do,0.223043
+LYTIC,DINOv2,DU145 st,0.048295
+LYTIC,DINOv2,LNCaP bp,0.168578
+LYTIC,DINOv2,LNCaP do,0.118501
+LYTIC,DINOv2,LNCaP st,0.043028
+LYTIC,DINOv2,PNT1A bp,0.080026
+LYTIC,DINOv2,PNT1A do,0.269677
+LYTIC,DINOv2,PNT1A st,0.394217
+LYTIC,DINOv2,macro,0.159137
+APOPTOSIS,Chance,macro,0.011592
+APOPTOSIS,Elapsed time,DU145 bp,0.133227
+APOPTOSIS,Elapsed time,DU145 do,0.004305
+APOPTOSIS,Elapsed time,DU145 st,0.021307
+APOPTOSIS,Elapsed time,LNCaP bp,0.024294
+APOPTOSIS,Elapsed time,LNCaP do,0.206509
+APOPTOSIS,Elapsed time,LNCaP st,0.112071
+APOPTOSIS,Elapsed time,PNT1A bp,0.047085
+APOPTOSIS,Elapsed time,PNT1A do,0.024117
+APOPTOSIS,Elapsed time,PNT1A st,0.036708
+APOPTOSIS,Elapsed time,macro,0.067736
+APOPTOSIS,DeadAhead (ours),DU145 bp,0.109059
+APOPTOSIS,DeadAhead (ours),DU145 do,0.248604
+APOPTOSIS,DeadAhead (ours),DU145 st,0.079017
+APOPTOSIS,DeadAhead (ours),LNCaP bp,0.192741
+APOPTOSIS,DeadAhead (ours),LNCaP do,0.158297
+APOPTOSIS,DeadAhead (ours),LNCaP st,0.158636
+APOPTOSIS,DeadAhead (ours),PNT1A bp,0.358075
+APOPTOSIS,DeadAhead (ours),PNT1A do,0.381136
+APOPTOSIS,DeadAhead (ours),PNT1A st,0.229906
+APOPTOSIS,DeadAhead (ours),macro,0.212830
+APOPTOSIS,VideoMAE (fine-tuned; ours),DU145 bp,0.117846
+APOPTOSIS,VideoMAE (fine-tuned; ours),DU145 do,0.260240
+APOPTOSIS,VideoMAE (fine-tuned; ours),DU145 st,0.082648
+APOPTOSIS,VideoMAE (fine-tuned; ours),LNCaP bp,0.129794
+APOPTOSIS,VideoMAE (fine-tuned; ours),LNCaP do,0.150484
+APOPTOSIS,VideoMAE (fine-tuned; ours),LNCaP st,0.143828
+APOPTOSIS,VideoMAE (fine-tuned; ours),PNT1A bp,0.296545
+APOPTOSIS,VideoMAE (fine-tuned; ours),PNT1A do,0.315800
+APOPTOSIS,VideoMAE (fine-tuned; ours),PNT1A st,0.210732
+APOPTOSIS,VideoMAE (fine-tuned; ours),macro,0.189769
+APOPTOSIS,DeepHit,DU145 bp,0.103875
+APOPTOSIS,DeepHit,DU145 do,0.224823
+APOPTOSIS,DeepHit,DU145 st,0.080144
+APOPTOSIS,DeepHit,LNCaP bp,0.148248
+APOPTOSIS,DeepHit,LNCaP do,0.162129
+APOPTOSIS,DeepHit,LNCaP st,0.126027
+APOPTOSIS,DeepHit,PNT1A bp,0.295624
+APOPTOSIS,DeepHit,PNT1A do,0.340080
+APOPTOSIS,DeepHit,PNT1A st,0.201801
+APOPTOSIS,DeepHit,macro,0.186972
+APOPTOSIS,DINOv2 + handcrafted,DU145 bp,0.141211
+APOPTOSIS,DINOv2 + handcrafted,DU145 do,0.188796
+APOPTOSIS,DINOv2 + handcrafted,DU145 st,0.077151
+APOPTOSIS,DINOv2 + handcrafted,LNCaP bp,0.109758
+APOPTOSIS,DINOv2 + handcrafted,LNCaP do,0.163705
+APOPTOSIS,DINOv2 + handcrafted,LNCaP st,0.184926
+APOPTOSIS,DINOv2 + handcrafted,PNT1A bp,0.381906
+APOPTOSIS,DINOv2 + handcrafted,PNT1A do,0.263860
+APOPTOSIS,DINOv2 + handcrafted,PNT1A st,0.109358
+APOPTOSIS,DINOv2 + handcrafted,macro,0.180075
+APOPTOSIS,Fine-tuned DINOv2 + handcrafted,DU145 bp,0.087055
+APOPTOSIS,Fine-tuned DINOv2 + handcrafted,DU145 do,0.105858
+APOPTOSIS,Fine-tuned DINOv2 + handcrafted,DU145 st,0.047508
+APOPTOSIS,Fine-tuned DINOv2 + handcrafted,LNCaP bp,0.098605
+APOPTOSIS,Fine-tuned DINOv2 + handcrafted,LNCaP do,0.181161
+APOPTOSIS,Fine-tuned DINOv2 + handcrafted,LNCaP st,0.143754
+APOPTOSIS,Fine-tuned DINOv2 + handcrafted,PNT1A bp,0.252565
+APOPTOSIS,Fine-tuned DINOv2 + handcrafted,PNT1A do,0.119745
+APOPTOSIS,Fine-tuned DINOv2 + handcrafted,PNT1A st,0.136003
+APOPTOSIS,Fine-tuned DINOv2 + handcrafted,macro,0.130250
+APOPTOSIS,Handcrafted,DU145 bp,0.119208
+APOPTOSIS,Handcrafted,DU145 do,0.070200
+APOPTOSIS,Handcrafted,DU145 st,0.040595
+APOPTOSIS,Handcrafted,LNCaP bp,0.144454
+APOPTOSIS,Handcrafted,LNCaP do,0.091682
+APOPTOSIS,Handcrafted,LNCaP st,0.091825
+APOPTOSIS,Handcrafted,PNT1A bp,0.288214
+APOPTOSIS,Handcrafted,PNT1A do,0.258024
+APOPTOSIS,Handcrafted,PNT1A st,0.069252
+APOPTOSIS,Handcrafted,macro,0.130384
+APOPTOSIS,DINOv2,DU145 bp,0.069772
+APOPTOSIS,DINOv2,DU145 do,0.022065
+APOPTOSIS,DINOv2,DU145 st,0.046853
+APOPTOSIS,DINOv2,LNCaP bp,0.081379
+APOPTOSIS,DINOv2,LNCaP do,0.079725
+APOPTOSIS,DINOv2,LNCaP st,0.077122
+APOPTOSIS,DINOv2,PNT1A bp,0.212740
+APOPTOSIS,DINOv2,PNT1A do,0.093193
+APOPTOSIS,DINOv2,PNT1A st,0.091064
+APOPTOSIS,DINOv2,macro,0.085990

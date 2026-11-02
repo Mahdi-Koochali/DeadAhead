@@ -1,0 +1,7 @@
+/data/*
+!/data/celldeathdetect_md5.txt
+__pycache__/
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/

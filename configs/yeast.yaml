@@ -1,0 +1,81 @@
+# Budding-yeast death probe (DetecDiv; Aspert et al. 2022, eLife, doi:10.7554/eLife.79519;
+# data: Zenodo record 6078462, lifespanAnnotation.zip, CC BY 4.0).
+# For reference and for the per-fold inputs read by yeast-finetune and yeast-predict; the other
+# values are the constants in deadahead/yeast/constants.py.
+
+data:
+  archive: lifespanAnnotation.zip      # read in memory, never extracted
+  positions: [Pos16_7, Pos3_3, Pos0_1, Pos20_6, Pos7_2, Pos9_5, Pos8_4]   # leave-one-position-out
+  lifespans: 249
+  deaths: 173
+  landmarks: 24346                    # every 6 frames (30 min) of every lifespan
+  frame_min: 5
+  horizons_min: [30, 60, 120, 240]    # primary: 30
+  clip_offsets: [24, 22, 21, 19, 18, 16, 14, 13, 11, 10, 8, 6, 5, 3, 2, 0]   # frames before t, oldest first
+
+model:
+  starts:
+    videomae_finetuned: the released fine-tuned VideoMAE of held-out group PNT1A_bp, the copy with the run's seed
+    videomae_public: the public VideoMAE-large weights (MCG-NJU/videomae-large, CC BY-NC 4.0)
+  classes: [NO_DEATH_30, DEATH_30]
+  steps: 1000
+  backbone_lr: 5.0e-5
+  layer_decay: 0.9
+  head_lr: 1.0e-3
+  weight_decay: 0.05
+  warmup_fraction: 0.05
+  grad_clip: 1.0
+  seeds: [2601562, 2601563, 2601564]
+
+# Intensity map per held-out position: x' = clip((x / 255 - m_D) / s_D * s_F + m_F, 0, 1).
+# channel: the channel with the highest median Laplacian variance over 1,000 seeded training frames;
+# m_D, s_D: that channel's moments over the 6 training positions; size_rule: Otsu threshold and cell side.
+source_moments:                      # the quantitative-phase training inputs (10,000 seeded frames)
+  m_F: 0.27325021740371375
+  s_F: 0.14570422978900535
+folds:
+  Pos16_7:
+    channel: 0
+    m_D: 0.34459456832450586
+    s_D: 0.11453171432848165
+    size_rule: {threshold: 82, side: below}
+  Pos3_3:
+    channel: 0
+    m_D: 0.307459822601193
+    s_D: 0.10789821760849391
+    size_rule: {threshold: 83, side: above}
+  Pos0_1:
+    channel: 0
+    m_D: 0.3482260684820054
+    s_D: 0.10414683081141181
+    size_rule: {threshold: 86, side: below}
+  Pos20_6:
+    channel: 0
+    m_D: 0.33805838465795984
+    s_D: 0.11373693135842598
+    size_rule: {threshold: 83, side: below}
+  Pos7_2:
+    channel: 2
+    m_D: 0.3145471829490568
+    s_D: 0.12538137829497245
+    size_rule: {threshold: 84, side: above}
+  Pos9_5:
+    channel: 2
+    m_D: 0.31932929828860396
+    s_D: 0.12750007273119365
+    size_rule: {threshold: 85, side: above}
+  Pos8_4:
+    channel: 2
+    m_D: 0.32014859658027395
+    s_D: 0.12723573264778704
+    size_rule: {threshold: 85, side: above}
+
+rules:
+  label_features: [age_min, divisions, since_last_bud_min, last_cycle_min, first_long_cycle, since_first_long_cycle_min]
+  picture_features: [pic_mean, pic_std, pic_mean_trend, pic_std_trend, pic_size, pic_size_trend]
+  lightgbm: {objective: binary, learning_rate: 0.05, num_leaves: 31, min_data_in_leaf: 100, feature_fraction: 0.8, bagging_fraction: 0.8, bagging_freq: 1, rounds: 200, seed: 0}
+  survival_head: {bins: 8, bin_frames: 6, rounds: 200, seed: 2601562}
+
+reading:                              # on the 7 position differences Delta_p
+  band: 0.02
+  ahead_needs: 6                      # of 7 positions

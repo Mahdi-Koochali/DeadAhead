@@ -1,0 +1,16 @@
+# GPU environment used for VideoMAE and DINOv2 training and inference (Python 3.10, CUDA 12.4)
+torch==2.5.1
+transformers==5.15.1
+safetensors==0.8.0
+huggingface_hub==1.28.0
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.15.3
+scikit-image==0.25.2
+tifffile==2025.5.10
+lightgbm==4.7.0
+pyarrow==12.0.1
+PyYAML==6.0.1
+imagecodecs==2025.3.30
+openpyxl==3.1.5
+matplotlib==3.7.0

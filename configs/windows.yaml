@@ -1,0 +1,20 @@
+# Read by deadahead/survival, deadahead/data and deadahead/features (their --config option reads another file).
+# Landmarks, history windows and forecast horizons. Times are in frames of 3 min unless the key ends in _min.
+
+frame_interval_min: 3.0          # minutes between frames
+pixel_size_um_per_px: 0.629      # 1.59 px per um
+
+landmark:
+  grid_every_frames: 10          # a forecast time (landmark) every 30 min along each track
+  history_frames_W: 40           # history window W = 40 frames = 120 min
+  min_followup_frames: 1
+
+horizons_min: [30, 60, 120, 240] # = 10, 20, 40, 80 frames
+
+truncation:
+  primary_truncation_frame: 439  # every movie is truncated to its first 439 frames (0 to 438), the length of
+                                 # the shortest group; deaths after the cut are censored at the cut. The panel
+                                 # keeps the name primary_439 for any value here.
+
+# Fixed in deadahead/data/windows.py, not settings: a landmark needs a cell at risk and W frames of history; each row
+# weighs 1 / (rows of its track), normalised per movie, panel and horizon. The competing risks are APOPTOSIS and LYTIC.
