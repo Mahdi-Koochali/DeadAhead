@@ -126,7 +126,7 @@ comparison can be recomputed without retraining.
 | Handcrafted | the 112 features (no cell dynamic score; Vicar et al., 2020) | LightGBM |
 | DINOv2 | ViT-B/14 adapted per fold without labels on random image tiles of the training groups; 9 single-frame embeddings over the past 120 min, pooled as last, mean and change | LightGBM |
 | DINOv2 + handcrafted | DINOv2 and the 112 features | LightGBM; also DeadAhead's survival head where a table says "same head" |
-| Fine-tuned DINOv2 + handcrafted | DINOv2 fine-tuned on the death labels (last two blocks, one fixed recipe) and the 112 features | LightGBM |
+| Fine-tuned DINOv2 + handcrafted | DINOv2 fine-tuned on the death labels (last two blocks and final norm, one fixed recipe) and the 112 features | LightGBM |
 | DeepHit | DeadAhead's inputs, one of eight settings chosen on an inner training group | DeepHit |
 | Elapsed time (control) | the forecast's time in the movie | a logistic fit in Table 1; later forecasts rank higher in the warnings |
 
@@ -142,11 +142,11 @@ survival heads cross-fitted over the eight training groups (LightGBM heads for D
 forecasts; on these pooled scores the threshold is set for a target reference alarm rate of 0.2 (primary) or
 0.4 alarms per event-free reference cell-hour, then applied once to the held-out group, where we report the
 pooled rate achieved. Reference forecasts have 240 min of event-free follow-up and count as 30 min of exposure each; every
-alarm counts. A death counts as warned X min ahead when the alarm is on at every forecast in its last X min, among deaths
-tracked that long; as forecasts are 30 min apart, the first of these alarms came X - 30 to X min before death.
+alarm counts.
+A death is covered over its final X min when the alarm is on at every forecast in that interval, among deaths tracked that long; as forecasts are 30 min apart, the first of these alarms came X-30 to X min before death. The median coverage takes each death's largest such X, 0 if none.
 
 Table 1 labels forecasts up to the cut; the survival metrics, the fixed-horizon results and the warnings use each movie's
-complete follow-up, and a sensitivity analysis restricts every method to forecasts with complete follow-up inside the cut
+complete follow-up, and a sensitivity analysis keeps only forecasts with complete follow-up inside the cut
 ([S6](SUPPLEMENT.md#s6-gap-analysis-sensitivity-analyses-censoring-and-label-audit)). The main analyses follow a dated protocol written before they ran. A dated amendment, written after
 those results were seen, added the threshold, outcome-handling and sensitivity analyses: it replaced alarm thresholds that
 had seen the test groups with training-only ones. The gap analyses, the within-hour scoring, the warnings of DINOv2 +

@@ -37,7 +37,7 @@ Held-out groups, mean over the 9 groups. DeadAhead's alarm thresholds were set o
 |---|:---:|:---:|---|
 | Macro AUPRC at 30 min | 0.322 | 0.213 | [Table 1](SUPPLEMENT.md#table-1) |
 | Chance | 0.024 | 0.012 | [Table 1](SUPPLEMENT.md#table-1) |
-| Deaths warned 60 min ahead, target 0.2 | 66.2% (achieved rate 0.24) | 62.1% (achieved rate 0.24) | [Figure 2](SUPPLEMENT.md#figure-2), [S3](SUPPLEMENT.md#s3-warnings-in-detail) |
+| Deaths covered, final 60 min, target 0.2 | 66.2% (achieved rate 0.24) | 62.1% (achieved rate 0.24) | [Figure 2](SUPPLEMENT.md#figure-2), [S3](SUPPLEMENT.md#s3-warnings-in-detail) |
 
 Every horizon is in [S1](SUPPLEMENT.md#s1-fixed-horizon-forecasts), every group in [S2](SUPPLEMENT.md#s2-per-group-differences).
 One command recomputes each number from the released predictions: see the

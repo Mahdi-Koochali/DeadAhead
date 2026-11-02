@@ -1,4 +1,4 @@
-"""Reproduce the post hoc alarm-rate analysis: the share of deaths warned against the alarm rate, and one comparison
+"""Reproduce the post hoc alarm-rate analysis: the share of deaths covered against the alarm rate, and one comparison
 at a matched achieved alarm rate.
 
 The thresholds are set exactly as in the warnings and image-warnings parts, on the training groups only, with only the

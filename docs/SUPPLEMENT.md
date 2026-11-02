@@ -12,17 +12,17 @@
 - [S8. Post hoc analyses](#s8-post-hoc-analyses)
 
 **From quantitative phase video of held-out groups, DeadAhead forecasts when and how a cell will die: it ranks lytic deaths
-at 13 times chance (macro AUPRC 0.322 against 0.024) and warns 66.2% of them 60 min ahead, with alarm
+at 13 times chance (macro AUPRC 0.322 against 0.024) and covers the final hour before 66.2% of them, with alarm
 thresholds set on training groups only.**
 
-Code, results and pretrained models for the paper *DeadAhead: Forecasting when and how a cell will die from quantitative phase video*
-(M. Koochali, N. Khalid, A. Dengel, S. Ahmed; under review).
+Code and supplement S1 to S8 for the paper *DeadAhead: Forecasting when and how a cell will die from quantitative phase video*
+(M. Koochali, N. Khalid, A. Dengel, S. Ahmed; under review), with links to the predictions and models on Zenodo.
 
 Forecasting when and how a cell will die would let biologists study cells while still alive, to learn why some cancer
-cells survive a drug that kills their neighbours. Existing forecasts say whether a cell will die, not when. Every 30
+cells survive a drug that kills their neighbours. No existing forecast says when a cell will die while keeping cells of unknown fate. Every 30
 min, DeadAhead, a fine-tuned VideoMAE with handcrafted features and a competing-risks survival head, forecasts each
 cell's death by apoptosis or lytic death within 30 to 240 min from its past two hours of quantitative phase
-video, keeping cells whose fate was never seen. On held-out line-by-treatment groups of three prostate cell lines, it
+video, keeping those cells. On held-out line-by-treatment groups of three prostate cell lines, it
 reached a 30-min lytic macro AUPRC of 0.322, thirteen times chance, against 0.254 for the best image
 baseline, DINOv2 + handcrafted (ahead in 8 of 9 groups). With training-only thresholds,
 DeadAhead's alarm was on at every forecast of the final hour before 66.2% of lytic deaths, far more than
@@ -32,16 +32,16 @@ an elapsed-time control. Both routes stayed far above chance out to 240 min.
 
 **Figure 1.** DeadAhead. (a) Every 30 min, VideoMAE (fine-tuned) features of the past 2 h and handcrafted features
 feed the survival head, giving the probability of lytic death, apoptosis or survival within h = 30 to 240 min.
-(b) Input crops (80.5 µm wide) of three held-out LNCaP do cells: orange, warned early; blue, the group's
-median warning; green, alive with no alarm. (c) Each dot is one
+(b) Input crops (80.5 µm wide) of three held-out LNCaP do cells: orange, early coverage; blue, the group's
+median coverage; green, alive with no alarm. (c) Each dot is one
 forecast, filled when its 30-min lytic risk exceeded the training-only threshold; the alive cell's time runs to its last
 forecast. Cells LNCaP_do_4:49, LNCaP_do_3:10 and LNCaP_do_2:8, seed 2601562; the orange cell's alarm stayed on through its
-last 270 min, which counts as warned 240 min ahead on the X grid of [Figure 2](#figure-2). Images:
+last 270 min, which counts as covered over its final 240 min on the X grid of [Figure 2](#figure-2). Images:
 CellDeathDetect (Vicar et al., 2020), CC BY 4.0.
 
 ## At a glance
 
-| Method | Lytic AUPRC ([Table 1](#table-1)) | Apoptosis AUPRC ([Table 1](#table-1)) | Lytic deaths warned 60 min ahead ([Figure 2](#figure-2)) | Details |
+| Method | Lytic AUPRC ([Table 1](#table-1)) | Apoptosis AUPRC ([Table 1](#table-1)) | Lytic deaths covered, final 60 min ([Figure 2](#figure-2)) | Details |
 |---|:---:|:---:|:---:|---|
 | **DeadAhead (ours)** | **0.322** | **0.213** | **66.2%** (achieved rate 0.24) | [S1](#s1-fixed-horizon-forecasts), [S3](#s3-warnings-in-detail) |
 | DeadAhead, target 0.26, at a matched alarm rate (post hoc) | | | **72.8%** (achieved rate 0.309) against 63.5% for DINOv2 + handcrafted (achieved rate 0.307); ahead in 7 of 9 groups | [S8](#s8-post-hoc-analyses) |
@@ -98,21 +98,22 @@ For lytic death the lead over DINOv2 + handcrafted ran from −0.059 to +0.172 a
 *Recomputed by `deadahead reproduce --part warnings` (DeadAhead, elapsed time), `--part image-warnings` (DINOv2 +
 handcrafted, post hoc) and `--part alarm-rate` (the second row, post hoc).*
 
-![Share of deaths warned X min ahead, with the interquartile range over the groups](figures/fig2_warnings.png)
+![Share of deaths covered over their final X min, with the interquartile range over the groups](figures/fig2_warnings.png)
 
-**Figure 2.** Share of deaths warned X min ahead, means over 9 held-out groups, among deaths with a forecast in
-every 30-min bin up to X; bands: interquartile range over the groups. Training-only thresholds at a target reference
+**Figure 2.** Alarm coverage. Share of deaths covered over their final X min, means over 9 held-out groups; bands:
+interquartile range over the groups. Training-only thresholds at a target reference
 alarm rate of 0.2; achieved (pooled): DeadAhead 0.24 and 0.24, DINOv2 + handcrafted (post hoc)
-0.31 and 0.22, elapsed time 0.21 and 0.21 (lytic, apoptosis). The values
-are in [`docs/figures/data/fig2_warnings_spread.csv`](figures/data/fig2_warnings_spread.csv) (means, ranges and
+0.31 and 0.22, elapsed time 0.21 and 0.21 (lytic, apoptosis). Deaths
+counted at X: those with a forecast in every 30-min bin up to X. The values are in
+[`docs/figures/data/fig2_warnings_spread.csv`](figures/data/fig2_warnings_spread.csv) (means, ranges and
 quartiles; columns `survival`: DeadAhead, `image`: DINOv2 + handcrafted, `clock`: elapsed time) and in
 [S3](#s3-warnings-in-detail).
 
-![Deaths warned 60 min ahead against the achieved alarm rate, the second row of Figure 2 (post hoc)](figures/figS8b_alarm_rate.png)
+![Deaths covered over their final 60 min against the achieved alarm rate, the second row of Figure 2 (post hoc)](figures/figS8b_alarm_rate.png)
 
-**Figure 2, second row (post hoc).** Deaths warned 60 min ahead (mean over the 9 held-out groups) against the achieved
-pooled alarm rate, for DeadAhead, DINOv2 + handcrafted with its own head and elapsed time. Each point is a training-only
-threshold on a target grid fixed in advance of this analysis. Rings: the matched lytic comparison
+**Figure 2, second row (post hoc).** Deaths covered over their final 60 min against the achieved rate (pooled), each point a
+training-only threshold on a grid fixed in advance; circles: the match. Means over the 9 held-out groups, for DeadAhead,
+DINOv2 + handcrafted with its own head and elapsed time; the match is the lytic comparison
 (0.309 against 0.307 pooled; [S8](#s8-post-hoc-analyses)). The values are in
 [`docs/figures/data/figS8b_alarm_rate.csv`](figures/data/figS8b_alarm_rate.csv).
 
@@ -262,13 +263,13 @@ without the untyped-death windows.
 
 *Recomputed by `deadahead reproduce --part warnings` and `--part image-warnings`.*
 
-**Table S3a.** The warnings at both targets. Achieved: alarms per event-free reference cell-hour, pooled and as the mean
-over groups. Warned: share of deaths warned X min ahead (%), mean over groups. Median warning: the median of each death's
+**Table S3a.** Alarm coverage at both targets. Achieved: alarms per event-free reference cell-hour, pooled and as the mean
+over groups. Covered: share of deaths covered over their final X min (%), mean over groups. Median coverage: the median of each death's
 largest such X (X in 30, 60, 90, 120, 180 and 240 min; 0 if none) among deaths with a forecast in every 30-min bin of their
 last 4 h, then the mean over groups. The DINOv2 + handcrafted rows are post hoc, and [S8](#s8-post-hoc-analyses)
 compares the methods at a matched achieved rate (0.309 against 0.307 pooled; post hoc).
 
-| Route | Target | Method | Achieved rate, pooled | Achieved rate, mean over groups | Warned 60 min ahead (%) | Warned 120 min ahead (%) | Warned 240 min ahead (%) | Median warning (min) |
+| Route | Target | Method | Achieved rate, pooled | Achieved rate, mean over groups | Covered, final 60 min (%) | Covered, final 120 min (%) | Covered, final 240 min (%) | Median coverage (min) |
 |---|:---:|---|:---:|:---:|:---:|:---:|:---:|:---:|
 | Lytic | 0.2 | DeadAhead | 0.24 | 0.29 | 66.2 | 38.7 | 13.9 | 89 |
 | Lytic | 0.2 | Elapsed time | 0.21 | 0.18 | 10.5 | 8.6 | 2.9 | 3 |
@@ -283,11 +284,13 @@ compares the methods at a matched achieved rate (0.309 against 0.307 pooled; pos
 | Apoptosis | 0.4 | Elapsed time | 0.41 | 0.36 | 53.2 | 50.1 | 34.7 | 133 |
 | Apoptosis | 0.4 | DINOv2 + handcrafted (post hoc) | 0.42 | 0.46 | 68.2 | 48.6 | 27.9 | 115 |
 
+Coverage of the final 90 min (49.7% of lytic deaths at target 0.2; elapsed time 9.3%, same eligible deaths) means the first alarm came at least 60 min before death; this is a lower bound from the coverage measure, not an exact lead time.
+
 **The example cells of Figure 1.** Examples illustrate the method and are not evidence. The orange cell was drawn from
-the 2 deaths warned this early, of the group's 49 tracked long enough; the green cell from 31 such cells of the 60 alive at
+the 2 deaths with coverage this early, of the group's 49 tracked long enough; the green cell from 31 such cells of the 60 alive at
 the end and tracked long enough.
 
-Without PNT1A bp, DeadAhead warned 60 min ahead for 66.8% of lytic deaths.
+Without PNT1A bp, DeadAhead covered the final hour before 66.8% of lytic deaths.
 
 **The alarm burden.** At DeadAhead's primary achieved lytic rate (0.24), 12.2% of event-free
 reference forecasts raise an alarm (reference time only, not the burden over all monitored cells). Both numbers are pooled
@@ -295,10 +298,10 @@ over the groups; each reference forecast counts 0.5 cell-hour, so the share is h
 rate is 0.29 and the share 14.5%, the grey line of [Figure S8c](#s8-post-hoc-analyses). Achieved rates
 differ from the target and across groups (lytic, at 0.2: 0.02 to 0.58), as the alarm
 thresholds come from heads trained on seven groups and scored on the eighth, and the encoder had seen them all. Even at a
-higher achieved rate (0.41 against 0.24), elapsed time warned 60 min ahead for fewer lytic
+higher achieved rate (0.41 against 0.24), elapsed time covered the final hour before fewer lytic
 deaths (21.2% against 66.2%).
 
-**Table S3b.** DeadAhead's lead in share of deaths warned X min ahead at the primary target, in percentage points, with the
+**Table S3b.** DeadAhead's lead in share of deaths covered over their final X min at the primary target, in percentage points, with the
 groups in which it is ahead. Mean over groups; the DINOv2 + handcrafted column is post hoc, and its two shares are at
 different achieved rates.
 
@@ -318,7 +321,7 @@ different achieved rates.
 | Lytic | 1,020 | 1,011 | 1,004 | 988 | 952 | 905 |
 | Apoptosis | 504 | 500 | 498 | 498 | 491 | 478 |
 
-**Table S3d.** Share of deaths warned X min ahead (%), means over groups. Column headers: method, route, target alarm rate.
+**Table S3d.** Share of deaths covered over their final X min (%), means over groups. Column headers: method, route, target alarm rate.
 The DINOv2 + handcrafted columns are post hoc. The values behind Figure 2.
 
 | X (min) | DeadAhead, lytic, 0.2 | DeadAhead, lytic, 0.4 | DeadAhead, apoptosis, 0.2 | DeadAhead, apoptosis, 0.4 | DINOv2 + handcrafted, lytic, 0.2 | DINOv2 + handcrafted, apoptosis, 0.2 | Elapsed time, lytic, 0.2 | Elapsed time, lytic, 0.4 | Elapsed time, apoptosis, 0.2 | Elapsed time, apoptosis, 0.4 |
@@ -343,8 +346,8 @@ the same encoder's features before fine-tuning.
 | Apoptosis | +0.084 | 9 of 9 |
 
 The two also differ in read-out layer and input tokens (adaptation saw only the unmasked tokens of a clip, the features
-use all of them). The head trains on rows the encoder was fine-tuned on and can over-trust them, an uncorrected bias
-against DeadAhead that is not separated from fine-tuning.
+use all of them). The head trains on rows the encoder was fine-tuned on and can over-trust them, which is not separated from
+fine-tuning.
 
 **Table S4b.** Macro AUPRC of VideoMAE (fine-tuned) at test time: hiding the tracked cell, shuffling the 16 frames or
 repeating the last frame 16 times.
@@ -382,8 +385,8 @@ the alarm score) and `--part sensitivity` (follow-up inside the cut).*
 | Same survival head and handcrafted features (fixed-horizon forecasts): VideoMAE features minus DINOv2 features | +0.079 (9 of 9) | yes | +0.069 (8 of 9) | yes |
 
 The DINOv2 comparison does not isolate temporal modelling: those DINOv2 features saw no labels, the DINOv2 baselines embed
-9 single frames against VideoMAE's 16-frame clip, and Fine-tuned DINOv2 tuned only two blocks with one fixed
-recipe, started from image rather than video pretraining and took its labels from each movie's complete follow-up. It added
+9 single frames against VideoMAE's 16-frame clip, and Fine-tuned DINOv2 tuned only two blocks and the final norm with one fixed
+recipe, from image rather than video pretraining, with labels from each movie's complete follow-up. It added
 little to the handcrafted features alone (lytic 0.217 against 0.216) and stayed below DINOv2 +
 handcrafted (0.254); we did not test why.
 
@@ -419,9 +422,10 @@ horizons (post hoc).
 |:---:|:---:|:---:|
 | 0.031 | 0.089 | 3 of 9 |
 
-**Table S6c. Complete follow-up** (recomputed by `deadahead reproduce --part sensitivity`). Every method restricted to
-forecasts with complete follow-up inside the cut; warnings restricted to forecasts with four hours of follow-up inside
-it, with thresholds reselected on the restricted training forecasts. Warned: means over groups; rates: achieved alarms per
+**Table S6c. Complete follow-up** (recomputed by `deadahead reproduce --part sensitivity`). At 30 min, all Table 1 methods are restricted to
+forecasts with complete follow-up inside the cut. Warnings and the longer horizons quoted in [S8](#s8-post-hoc-analyses) cover DeadAhead and
+elapsed time only; warnings are restricted to forecasts with four hours of follow-up inside it, with thresholds reselected on the restricted
+training forecasts. Covered: means over groups; rates: achieved alarms per
 event-free reference cell-hour, pooled. The rows of groups ahead count DeadAhead against elapsed time.
 
 | Quantity | Main analysis | Follow-up inside the cut |
@@ -434,18 +438,18 @@ event-free reference cell-hour, pooled. The rows of groups ahead count DeadAhead
 | DeadAhead's achieved apoptosis rate | 0.24 | 0.25 |
 | Reference forecasts | 38,014 | 35,767 |
 | Eligible lytic deaths, X = 60 min | 1,011 | 937 |
-| DeadAhead warned 60 min ahead, lytic (%) | 66.2 | 66.9 |
-| Elapsed time warned 60 min ahead, lytic (%) | 10.5 | 10.8 |
+| DeadAhead covered, final 60 min, lytic (%) | 66.2 | 66.9 |
+| Elapsed time covered, final 60 min, lytic (%) | 10.5 | 10.8 |
 | Eligible apoptotic deaths, X = 60 min | 500 | 371 |
-| DeadAhead warned 60 min ahead, apoptosis (%) | 62.1 | 63.7 |
-| Elapsed time warned 60 min ahead, apoptosis (%) | 37.8 | 32.2 |
+| DeadAhead covered, final 60 min, apoptosis (%) | 62.1 | 63.7 |
+| Elapsed time covered, final 60 min, apoptosis (%) | 37.8 | 32.2 |
 | Eligible apoptotic deaths, X = 120 min | 498 | 369 |
-| DeadAhead warned 120 min ahead, apoptosis (%) | 44.6 | 46.3 |
-| Elapsed time warned 120 min ahead, apoptosis (%) | 30.1 | 21.2 |
+| DeadAhead covered, final 120 min, apoptosis (%) | 44.6 | 46.3 |
+| Elapsed time covered, final 120 min, apoptosis (%) | 30.1 | 21.2 |
 | Groups with DeadAhead ahead, apoptosis, X = 120 min | 5 of 9 | 7 of 9 |
 | Eligible apoptotic deaths, X = 240 min | 478 | 349 |
-| DeadAhead warned 240 min ahead, apoptosis (%) | 25.1 | 22.5 |
-| Elapsed time warned 240 min ahead, apoptosis (%) | 17.0 | 0.0 |
+| DeadAhead covered, final 240 min, apoptosis (%) | 25.1 | 22.5 |
+| Elapsed time covered, final 240 min, apoptosis (%) | 17.0 | 0.0 |
 | Groups with DeadAhead ahead, apoptosis, X = 240 min | 5 of 9 | 9 of 9 |
 
 The restriction leaves out the 16 forecasts at frame 430 that count only because their cell died by the cut
@@ -582,23 +586,23 @@ forecast at 90 min is not stored, so the increment is not computed at g = 90 min
 with chance as the grey line; DINOv2 + handcrafted under the same survival head as DeadAhead. The values are in
 [`docs/figures/data/figS8a_gap_window.csv`](figures/data/figS8a_gap_window.csv).
 
-**Warnings against the alarm rate.** How do the share of deaths warned and the alarm burden trade off across target rates,
-and at a matched achieved lytic alarm rate (0.309 against 0.307, pooled), which method warns more
-lytic deaths 60 min ahead?
+**Alarm coverage against the alarm rate.** How do the share of deaths covered and the alarm burden trade off across target rates,
+and at a matched achieved lytic alarm rate (0.309 against 0.307, pooled), which method covers the
+final hour before more lytic deaths?
 
 **Scoring.** Each method raises an alarm when its predicted 30-min risk (elapsed time: its score) exceeds a threshold chosen
 on the training groups only, as in [S3](#s3-warnings-in-detail) with only the target changed: from 0.05 to 0.80 alarms per
 event-free reference cell-hour in steps of 0.05 (for matching, DeadAhead and DINOv2 + handcrafted also from 0.005 to 0.800
 in steps of 0.005). Here DINOv2 + handcrafted is the baseline with its own head, as in S3. Achieved rates on the
 held-out groups differ from the target, so each row prints the achieved rate (pooled over the held-out groups) beside
-the share of deaths warned 60 min ahead (the alarm on at every forecast in the last 60 min, among deaths tracked that
+the share of deaths covered over their final 60 min (the alarm on at every forecast in that interval, among deaths tracked that
 long; mean over the 9 groups). A difference at the same target compares different achieved rates; only the
 matched points below (0.309 against 0.307 pooled, lytic) compare matched alarm burdens.
 
 **Table S8c (post hoc).** Lytic death: target, achieved alarms per event-free reference cell-hour (pooled) and share of
-deaths warned 60 min ahead (%, mean over the groups), per method (`--part alarm-rate`).
+deaths covered over their final 60 min (%, mean over the groups), per method (`--part alarm-rate`).
 
-| Target | DeadAhead: achieved | DeadAhead: warned (%) | DINOv2 + handcrafted: achieved | DINOv2 + handcrafted: warned (%) | Elapsed time: achieved | Elapsed time: warned (%) | DeadAhead minus DINOv2 + handcrafted, points (groups ahead) |
+| Target | DeadAhead: achieved | DeadAhead: covered (%) | DINOv2 + handcrafted: achieved | DINOv2 + handcrafted: covered (%) | Elapsed time: achieved | Elapsed time: covered (%) | DeadAhead minus DINOv2 + handcrafted, points (groups ahead) |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | 0.05 | 0.08 | 38.5 | 0.08 | 32.8 | 0.06 | 4.7 | +5.7 (6 of 9) |
 | 0.10 | 0.13 | 51.3 | 0.16 | 48.0 | 0.11 | 6.4 | +3.3 (6 of 9) |
@@ -619,7 +623,7 @@ deaths warned 60 min ahead (%, mean over the groups), per method (`--part alarm-
 
 **Table S8d (post hoc).** Apoptosis, the same.
 
-| Target | DeadAhead: achieved | DeadAhead: warned (%) | DINOv2 + handcrafted: achieved | DINOv2 + handcrafted: warned (%) | Elapsed time: achieved | Elapsed time: warned (%) | DeadAhead minus DINOv2 + handcrafted, points (groups ahead) |
+| Target | DeadAhead: achieved | DeadAhead: covered (%) | DINOv2 + handcrafted: achieved | DINOv2 + handcrafted: covered (%) | Elapsed time: achieved | Elapsed time: covered (%) | DeadAhead minus DINOv2 + handcrafted, points (groups ahead) |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | 0.05 | 0.09 | 31.8 | 0.06 | 20.3 | 0.06 | 19.2 | +11.6 (6 of 9) |
 | 0.10 | 0.15 | 45.3 | 0.11 | 33.0 | 0.11 | 25.9 | +12.3 (6 of 9) |
@@ -638,9 +642,9 @@ deaths warned 60 min ahead (%, mean over the groups), per method (`--part alarm-
 | 0.75 | 0.78 | 91.1 | 0.73 | 83.1 | 0.76 | 72.2 | +8.0 (7 of 9, meets the rule) |
 | 0.80 | 0.83 | 92.3 | 0.78 | 84.4 | 0.81 | 73.9 | +8.0 (7 of 9, meets the rule) |
 
-![Deaths warned 60 min ahead against the achieved alarm rate (post hoc)](figures/figS8b_alarm_rate.png)
+![Deaths covered over their final 60 min against the achieved alarm rate (post hoc)](figures/figS8b_alarm_rate.png)
 
-**Figure S8b (post hoc).** Deaths warned 60 min ahead (mean over the 9 groups) against the achieved
+**Figure S8b (post hoc).** Deaths covered over their final 60 min (mean over the 9 groups) against the achieved
 pooled alarm rate, for DeadAhead, DINOv2 + handcrafted with its own head and elapsed time, each with its own training-only
 thresholds. Markers: the targets of Tables S8c and S8d; lines through the DeadAhead and DINOv2 + handcrafted markers: the
 fine grid of targets; rings: the matched lytic comparison, with both achieved rates printed. The values are in
@@ -651,7 +655,7 @@ DINOv2 + handcrafted achieved 0.307 lytic alarms per event-free reference cell-h
 grid of targets, DeadAhead's achieved pooled rate came closest to that value at a target of 0.26. This
 target was chosen post hoc, by matching achieved rates on the held-out groups, while each threshold was still set on
 the training groups only. At the matched rates, 0.309 for DeadAhead and 0.307 for
-DINOv2 + handcrafted, DeadAhead warned 72.8% of lytic deaths 60 min ahead and DINOv2 +
+DINOv2 + handcrafted, DeadAhead covered the final hour before 72.8% of lytic deaths and DINOv2 +
 handcrafted 63.5%: a mean difference of +9.3 points, DeadAhead ahead in 7 of
 9 groups and behind in 2, which meets our decision rule (+11.3 points,
 7 of 8, without PNT1A bp). Matched the other way round, DeadAhead is ahead in
@@ -662,7 +666,7 @@ and decide nothing: the same match for apoptosis, and the reverse match (DINOv2 
 achieved lytic rate at its target of 0.2). Achieved rates: alarms per event-free reference cell-hour,
 pooled and as the mean over groups.
 
-| Match | DeadAhead: target | DeadAhead: achieved (pooled) | DeadAhead: achieved (mean over groups) | DeadAhead: warned (%) | DINOv2 + handcrafted: target | DINOv2 + handcrafted: achieved (pooled) | DINOv2 + handcrafted: achieved (mean over groups) | DINOv2 + handcrafted: warned (%) | Difference, points (groups ahead) |
+| Match | DeadAhead: target | DeadAhead: achieved (pooled) | DeadAhead: achieved (mean over groups) | DeadAhead: covered (%) | DINOv2 + handcrafted: target | DINOv2 + handcrafted: achieved (pooled) | DINOv2 + handcrafted: achieved (mean over groups) | DINOv2 + handcrafted: covered (%) | Difference, points (groups ahead) |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | Lytic | 0.26 | 0.309 | 0.365 | 72.8 | 0.2 | 0.307 | 0.348 | 63.5 | +9.3 (7 of 9) |
 | Apoptosis | 0.18 | 0.223 | 0.306 | 60.3 | 0.2 | 0.222 | 0.254 | 49.9 | +10.4 (6 of 9) |
@@ -673,7 +677,7 @@ above are matched pooled over the groups, while group rates still differ. Here, 
 DeadAhead's threshold is read off that group's reference forecasts, so that it raises as many reference alarms as DINOv2 +
 handcrafted at its target of 0.2. This threshold has seen the held-out group.
 
-| Match | DeadAhead: warned (%) | DINOv2 + handcrafted: warned (%) | Difference, points (groups ahead) |
+| Match | DeadAhead: covered (%) | DINOv2 + handcrafted: covered (%) | Difference, points (groups ahead) |
 |---|:---:|:---:|:---:|
 | Lytic, group by group | 71.2 | 63.5 | +7.7 (8 of 9) |
 

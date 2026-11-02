@@ -106,14 +106,14 @@ and `P/O`; the lines above stop at `IPA`, and [Table 2](SUPPLEMENT.md#table-2)'s
 | `data` | the counts of the [Data and Forecast tables](METHOD.md#method-in-brief): cells, deaths and forecasts over all 63 movies and the 62 scored movies, the cut, the positives, and the movie lengths (439 to 863 frames, 21.95 to 43.15 h) | under 1 s |
 | `table1` | Table 1 and its leads, S2, the Table 1 numbers of S5, the fewest and most forecasts per group; also `table1.chance` (`nine_folds`, `eight_folds_without_PNT1A_bp`) and `table1.elapsed_time_fit` (per route, weighted and unweighted: `slope_per_group`, `groups_slope_below_zero`, `groups_slope_above_zero`, `auprc`) | 28 to 53 s |
 | `warnings` | Figure 2 (DeadAhead, elapsed time) and S3; prints the mean rate, the row without PNT1A_bp, the eligible deaths and DeadAhead minus elapsed time | 25 to 49 s |
-| `image-warnings` | Figure 2 (DINOv2 + handcrafted), that baseline's warning share, S3 (post hoc) | 36 to 100 s |
+| `image-warnings` | Figure 2 (DINOv2 + handcrafted), that baseline's alarm coverage, S3 (post hoc) | 36 to 100 s |
 | `horizons` | Table 2, S1 (Slope is `ipcw_slope`, P/O is `e_over_o`), the same-head comparison and the alarm score of S5 (the comparison is also quoted in S6's gap analysis), the probability accuracy of S6; prints the prevalence, the rate, the groups below zero, Slope, P/O and a block of same-head contrasts | 8 to 17 min |
 | `gap` | S6, gap analysis (post hoc); also prints the score by the whole 120-min risk and by the increment given survival to 60 min | 5 to 52 s |
 | `sensitivity` | S6, complete follow-up, the follow-up row of S5, and the fixed horizons inside the cut quoted in S8; prints the macro AUPRC per method, the contrasts at the common landmark and the fixed-horizon tables at the cut | 5 to 8 min |
 | `decomposition` | S4 | 10 to 11 s |
 | `censoring` | S6, keeping censored cells | about 1 s |
 | `gap-window` | S8, forecasting beyond the last minutes (post hoc) | 2 to 3 s |
-| `alarm-rate` | S8, warnings against the alarm rate and the matched comparison (post hoc); prints the reverse match and the apoptosis match | about 4 min |
+| `alarm-rate` | S8, alarm coverage against the alarm rate and the matched comparison (post hoc); prints the reverse match and the apoptosis match | about 4 min |
 | `within-time` | S8, scoring within each hour of imaging (post hoc); prints every method at 1-hour bands, the lead over DINOv2 + handcrafted at each band width and the second design with its ceiling | about 23 s |
 
 The 646 and 1,119 of the `data` part count 11 and 2 excluded deaths dated after their movie ends. Their routes come from the

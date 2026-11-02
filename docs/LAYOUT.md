@@ -63,7 +63,7 @@ tests/                        unit and end-to-end tests on synthetic data (pytes
 | `deadahead/evaluation/rows.py` | Forecast rows: row keys, score alignment, the evaluation cohort and the outcome sets P, Q, N, U |
 | `deadahead/evaluation/survival_metrics.py` | Survival metrics of one held-out group at fixed horizons, numpy only: IPCW Brier score and IPA, Wolbers' concordance, expected over observed incidence and the IPCW calibration intercept and slope |
 | `deadahead/evaluation/table1.py` | Table 1: AUPRC at 30 min per method, cause, held-out group and seed, the macros and the paired contrasts |
-| `deadahead/reproduce/alarm_rate.py` | Reproduce the post hoc alarm-rate analysis: the share of deaths warned against the alarm rate, and one comparison at a matched achieved alarm rate |
+| `deadahead/reproduce/alarm_rate.py` | Reproduce the post hoc alarm-rate analysis: the share of deaths covered against the alarm rate, and one comparison at a matched achieved alarm rate |
 | `deadahead/reproduce/bundle.py` | Read the predictions bundle: the forecast rows, the cell event types and the held-out predictions per method |
 | `deadahead/reproduce/censoring.py` | Reproduce the injected-censoring experiment (supplementary S6) from the bundle's stored unit predictions |
 | `deadahead/reproduce/compare.py` | Leaf-by-leaf comparison of two result trees, for the cross-checks between reproduce parts |
@@ -79,7 +79,7 @@ tests/                        unit and end-to-end tests on synthetic data (pytes
 | `deadahead/reproduce/warning_times.py` | Reproduce the warnings from a predictions bundle: training-only alarm thresholds at targets of 0.2 and 0.4 alarms per event-free reference cell-hour, applied to DeadAhead's held-out F_c(30) and to the elapsed-time score |
 | `deadahead/reproduce/within_time.py` | Reproduce the post hoc within-hour scoring: the 30-min ranking when a forecast competes only with forecasts of the same group in the same hour of imaging |
 | `deadahead/report/bundle_tables.py` | Tables of the supplement read from the predictions bundle, not from the reproduce output: the weight of each outcome in the training rows, and two post hoc views of the warnings (the alarm share per 30-min bin before death, the match group by group) |
-| `deadahead/report/figures.py` | Figures for the supplement: the warning curves of Figure 2, the overview of Table 1, the figures of S1, S2 and S4 and the post hoc figures of S8 |
+| `deadahead/report/figures.py` | Figures for the supplement: the alarm-coverage curves of Figure 2, the overview of Table 1, the figures of S1, S2 and S4 and the post hoc figures of S8 |
 | `deadahead/yeast/constants.py` | Constants and folds of the budding-yeast death probe (DetecDiv, Aspert et al. 2022, Zenodo 6078462, CC BY 4.0) |
 | `deadahead/yeast/data.py` | Yeast data: landmark rows, 16-frame clips, the pixel store, the per-fold channel and intensity map, the picture measurements and the per-fold row files |
 | `deadahead/yeast/finetune.py` | Short fine-tune of VideoMAE-large on yeast death within 30 min, from one of two starts, then the held-out pass |

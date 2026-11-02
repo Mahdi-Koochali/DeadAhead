@@ -1,5 +1,5 @@
-"""Figures for the supplement: the warning curves of Figure 2, the overview of Table 1, the figures of S1, S2 and S4 and
-the post hoc figures of S8.
+"""Figures for the supplement: the alarm-coverage curves of Figure 2, the overview of Table 1, the figures of S1, S2 and
+S4 and the post hoc figures of S8.
 
 Each method keeps one line style and one marker in every figure, and position or marker carries every other identity,
 so the figures read in greyscale.
@@ -85,7 +85,8 @@ def _save(fig, out: Path) -> None:
 
 
 def plot_warnings(table: pd.DataFrame, out: Path) -> None:
-    """Fig. 2: share of deaths warned X min ahead per route, means over the groups with their interquartile bands."""
+    """Fig. 2: share of deaths covered over their final X min per route, means over the groups with their
+    interquartile bands."""
     with plt.rc_context({"hatch.linewidth": 0.5}):
         fig, axes = plt.subplots(1, 2, figsize=(5.2, 2.5), dpi=300, sharey=True)
         keys = []
@@ -103,9 +104,9 @@ def plot_warnings(table: pd.DataFrame, out: Path) -> None:
             _axes_style(ax)
         for m, _ in SPREAD_SERIES:
             keys.append((Patch(**BANDS[m]), Line2D([], [], **_line(m))))
-        axes[0].set_ylabel("deaths warned (%)", fontsize=7)
+        axes[0].set_ylabel("covered (%)", fontsize=7)
         fig.subplots_adjust(left=0.1, right=0.985, top=0.87, bottom=0.2, wspace=0.08)
-        fig.text(0.54, 0.035, "warning before death, X (min)", ha="center", fontsize=7)
+        fig.text(0.54, 0.035, "final interval, X (min)", ha="center", fontsize=7)
         fig.legend(keys, [LABELS[m] for m, _ in SPREAD_SERIES], handler_map={tuple: HandlerTuple(ndivide=1, pad=0)},
                    loc="upper center", ncol=3, frameon=False, fontsize=7, handlelength=2.6)
         _save(fig, out)
@@ -141,8 +142,8 @@ def plot_gap_window(table: pd.DataFrame, out: Path) -> None:
 
 
 def plot_alarm_rate(table: pd.DataFrame, out: Path) -> None:
-    """The post hoc alarm-rate analysis: deaths warned 60 min ahead against the achieved pooled alarm rate, per
-    route; the two sides of the lytic matched comparison are ringed, with both achieved rates printed."""
+    """The post hoc alarm-rate analysis: deaths covered over their final 60 min against the achieved pooled alarm
+    rate, per route; the two sides of the lytic matched comparison are ringed, with both achieved rates printed."""
     fig, axes = plt.subplots(1, len(ROUTES), figsize=(5.6, 3.0), dpi=300, sharey=True)
     methods = list(dict.fromkeys(table["method"]))
     for ax, (route, name) in zip(axes, ROUTES.items()):
@@ -177,7 +178,7 @@ def plot_alarm_rate(table: pd.DataFrame, out: Path) -> None:
                 f"{a['achieved_pooled']:.3f}, {a['warned_last_60_min_pct']:.1f}%\n{LABELS[methods[1]]}: "
                 f"{b['achieved_pooled']:.3f}, {b['warned_last_60_min_pct']:.1f}%", fontsize=5.8, color=INK, va="top",
                 linespacing=1.25)
-    axes[0].set_ylabel("deaths warned 60 min ahead (%)", fontsize=7)
+    axes[0].set_ylabel("covered (%)", fontsize=7)
     keys = [Line2D([], [], **_line(m)) for m in methods]
     fig.subplots_adjust(left=0.1, right=0.985, top=0.82, bottom=0.14, wspace=0.08)
     fig.text(0.54, 0.025, "achieved alarms per event-free reference cell-hour (pooled over the held-out groups)",
