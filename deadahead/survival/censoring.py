@@ -7,8 +7,9 @@ history features and scored on the held-out group against the oracle labels of t
     (a) a_naive_drop       drop every landmark that is censored at any time
     (b) b_naive_mislabel   label a window censored inside its horizon as event-free
     (c) c_censoring_aware  drop only the windows censored inside their horizon
-    (d) d_joint_survival   the DeadAhead survival head (deadahead/survival/head.py); its risk set ends at each
-                           landmark's known end of follow-up, so only fully observed 30-min bins count as survived
+    (d) d_joint_survival   the DeadAhead survival head (deadahead/survival/head.py). The bin holding an injected censor
+                           is kept, so a death later in that bin can stay a target and the bin can count as survived.
+                           This arm is not reported: no number in the paper uses it.
 
 The cells whose death has no type are left out of training and testing. One unit is one (held-out group, regime,
 seed): 9 x 4 x 3 = 108 units. ``deadahead reproduce --part censoring`` scores the stored units.

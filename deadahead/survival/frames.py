@@ -161,7 +161,9 @@ def panel_view(lm: pd.DataFrame, untyped: str = "censor_at_death", movies: pd.Da
     D = time_to_event_min / 3 frames from the landmark to the end of its follow-up.
     * apoptosis or lytic death inside the panel: true_event = cause, t_event_true = t_obs + D, censor_offset = inf;
     * every other landmark: true_event = NONE, t_event_true = NaN, censor_offset = 10 * (ceil(D / 10) - 1) frames,
-      so only the bins seen in full count as survived.
+      so only the bins seen in full count as survived. At D an exact multiple of 10 this credits one bin fewer than
+      was seen. No forecast at the default cut has such a D; a new cut should handle it, keeping an untyped death on
+      the boundary out of the event-free count.
     """
     tte, term = reference_inputs(lm, untyped, movies, cut)
     D = tte / FRAME_MIN

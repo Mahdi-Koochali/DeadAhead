@@ -72,7 +72,7 @@ tests/                        unit and end-to-end tests on synthetic data (pytes
 | `deadahead/reproduce/gap.py` | Reproduce the post hoc gap analysis: deaths 60 to 120 min ahead, with the forecasts whose cell died within the first 60 min left out |
 | `deadahead/reproduce/gap_window.py` | Reproduce the post hoc window analysis: AUPRC of deaths g to H min ahead, with the forecasts whose cell died within the first g min left out, at H = 120 min (g = 0, 30, 60, 90) and H = 240 min (g = 0, 30, 60, 90, 120) |
 | `deadahead/reproduce/horizons.py` | Reproduce the fixed-horizon results: at h = 30, 60, 120 and 240 min, DeadAhead and elapsed time at training-only alarm thresholds (precision, sensitivity, AUPRC, prevalence), the AUPRC of the other survival methods, and the survival estimators of the four survival methods (IPCW Brier score, IPA, Wolbers' concordance, E/O, the IPCW calibration intercept and slope) |
-| `deadahead/reproduce/image_warnings.py` | Reproduce, post hoc, the warnings of the image baseline (DINOv2 image features + handcrafted features, refit head) under the same training-only alarm thresholds as DeadAhead's warnings |
+| `deadahead/reproduce/image_warnings.py` | Reproduce, post hoc, the warnings of the image baseline (DINOv2 image features + handcrafted features, refit head) with its own training-only alarm thresholds, set the same way as DeadAhead's |
 | `deadahead/reproduce/main.py` | deadahead reproduce: recompute the paper's Table 1, the warnings and the supplementary results from a predictions bundle |
 | `deadahead/reproduce/sensitivity.py` | Reproduce the sensitivity analyses that the paper quotes: Table 1 restricted to rows whose 30-min window ends inside the common cut (frame 438), and the warnings at a common landmark (rows t <= 358, follow-up truncated at frame 438, thresholds reselected on the restricted training reference rows) |
 | `deadahead/reproduce/table1.py` | Reproduce Table 1 from a predictions bundle: AUPRC at 30 min on the common evaluation cohort, every method |
@@ -102,7 +102,7 @@ tests/                        unit and end-to-end tests on synthetic data (pytes
 | outcome sets P, Q, N, U | for one route and horizon: dies by that route within the horizon, dies by the other route, event-free through the horizon, or follow-up ends inside the horizon (never scored as a negative) |
 | *reference forecasts* | event-free landmarks followed for 240 min; alarm thresholds are set on them |
 | *complete-movie labels* (the *oracle* labels in the code) | labels from each cell's full follow-up, while training labels stop at the cut |
-| *primary panel* (`primary_439`) | the forecast rows with every movie cut at frame 439 |
+| *primary panel* (`primary_439`) | the forecast rows with every movie cut after the first 439 frames |
 
 ## Licences
 

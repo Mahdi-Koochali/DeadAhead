@@ -119,7 +119,7 @@ and `P/O`; the lines above stop at `IPA`, and [Table 2](SUPPLEMENT.md#table-2)'s
 | `gap` | S6, gap analysis (post hoc); also prints the score by the whole 120-min risk and by the increment given survival to 60 min | 5 to 52 s |
 | `sensitivity` | S6, complete follow-up, the follow-up row of S5, and the fixed horizons inside the cut quoted in S8; prints the macro AUPRC per method, the contrasts at the common landmark and the fixed-horizon tables at the cut | 5 to 8 min |
 | `decomposition` | S4 | 10 to 11 s |
-| `censoring` | S6, keeping censored cells | about 1 s |
+| `censoring` | S6, using forecasts until censored | about 1 s |
 | `gap-window` | S8, forecasting beyond the last minutes (post hoc) | 2 to 3 s |
 | `alarm-rate` | S8, alarm coverage against the alarm rate and the matched comparison (post hoc); prints the reverse match and the apoptosis match | about 4 min |
 | `within-time` | S8, scoring within each hour of imaging (post hoc); prints every method at 1-hour bands, the lead over DINOv2 + handcrafted at each band width and the second design with its ceiling | about 23 s |
@@ -151,9 +151,8 @@ folder.
 
 `reproduce` checks the bundle against its `MANIFEST.json`, writes every value as JSON and the figure tables, then prints
 each table; the time of each part goes to stderr. The JSON of the post hoc parts carries `"post_hoc": true`, and `--help`
-marks them. With numpy 2.x the results equal, bit for bit, the values behind the paper's numbers (S1's training-reference
-IPA, recorded from a second implementation of the same estimator, agrees to within 1e-15 absolute); with numpy 1.26 they
-agree to within about 1e-12 relative, and every printed value is the same. `configs/evaluation.yaml` holds the alarm and
+marks them. With numpy 2.5 the results equal, bit for bit, the values behind the paper's numbers (S1's training-reference
+IPA, recorded from a second implementation of the same estimator, agrees to within 1e-15 absolute); with numpy 1.26 and 2.2 they agree to within about 1e-12 relative, and every printed value is the same. `configs/evaluation.yaml` holds the alarm and
 horizon settings (`horizons_min`, `positivity_min_g`).
 
 ## Installation

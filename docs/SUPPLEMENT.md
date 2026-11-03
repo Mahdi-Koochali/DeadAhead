@@ -16,7 +16,7 @@ at 13 times chance (macro AUPRC 0.322 against 0.024) and covers the final hour b
 thresholds set on training groups only.**
 
 Code and supplement S1 to S8 for the paper *DeadAhead: Forecasting when and how a cell will die from quantitative phase video*
-(M. Koochali, N. Khalid, A. Dengel, S. Ahmed; under review), with links to the predictions and models on Zenodo.
+(M. Koochali, N. Khalid, A. Dengel, S. Ahmed; under review), with links to the [predictions](https://zenodo.org/records/23883611) and [models](https://zenodo.org/records/23883153) on Zenodo.
 
 Forecasting when and how a cell will die would let biologists study cells while still alive, to learn why some cancer
 cells survive a drug that kills their neighbours. No existing image-based forecast says when a cell will die while keeping cells of unknown fate. Every 30
@@ -68,7 +68,7 @@ of [Figure 2](#figure-2). Recomputed by `deadahead reproduce --part table1` (AUP
 
 **Table 1.** Macro AUPRC at 30 min over the 9 held-out groups, with DeadAhead's lead and, in brackets, the groups
 ahead (\*: meets our decision rule). Leads and multiples of chance use unrounded values. Chance: the positive rate averaged over groups ([Method in brief](METHOD.md#method-in-brief)
-gives it pooled). Comparator heads are refit without the untyped-death windows (for Fine-tuned DINOv2 + handcrafted, only the head).
+gives it pooled). Comparator heads are refit without training windows that contain an untyped death (for Fine-tuned DINOv2 + handcrafted, only the head).
 
 | Model | Lytic | Lead (groups ahead) | Apoptosis | Lead (groups ahead) |
 |---|:---:|:---:|:---:|:---:|
@@ -194,6 +194,14 @@ negative except for lytic death up to 60 min, as its probabilities are too extre
 1, P/O above 1), and they need recalibration before use as risks. Table S1b gives the same two measures for all four
 survival methods.
 
+**Censoring weights.** IPA, concordance and the calibration slope weight forecasts by the inverse of G, the empirical survivor
+curve of the time to the movie's end over the held-out group's forecasts, one G per group (marginal). Predicted over observed
+incidence uses the Aalen-Johansen estimate, not G. The usual assumption is that censoring is independent of the event given the
+covariates, with positivity. This G assumes more: within a group, the censoring time is independent of the event time and of
+the inputs, with positivity over 0 to 240 min. Censoring here is the movie's end, so it depends on the forecast time, which a
+marginal G ignores; 30, 60, 403 and 1,655 of 52,023 forecasts are unresolved at 30, 60, 120 and 240 min. Table S1e shows how
+far the scores move without the weights.
+
 **Table S1b.** Calibration slope and predicted over observed incidence (P/O) of the survival methods, macro over the
 9 held-out groups.
 
@@ -225,6 +233,21 @@ ahead), from the `contrasts` block of `deadahead reproduce --part horizons`.
 | 60 | +0.224 (9 of 9) | yes | +0.251 (9 of 9) | yes |
 | 120 | +0.162 (8 of 9) | yes | +0.186 (8 of 9) | yes |
 | 240 | +0.044 (7 of 9) | yes | +0.071 (6 of 9) | no |
+
+**Table S1e.** IPA of DeadAhead, macro over the 9 held-out groups: with censoring weights on all forecasts (Table S1a);
+on the complete cases of those forecasts with no weights (pre-specified, from the record of the paper's runs); and on the
+forecasts whose horizon ends inside the common cut of Table S6c (from the JSON that `deadahead reproduce --part sensitivity
+--out FILE` writes). The last row of each route is a different selection. Both comparisons show how far the scores move, not
+that the assumption above holds.
+
+| Route | Forecasts | 30 min | 60 min | 120 min | 240 min |
+|---|---|:---:|:---:|:---:|:---:|
+| Lytic | All, censoring weights | 0.031 | 0.051 | −0.002 | −0.082 |
+| Lytic | Complete cases, no weights | 0.031 | 0.051 | 0.001 | −0.066 |
+| Lytic | Horizon inside the cut | 0.033 | 0.054 | 0.003 | −0.075 |
+| Apoptosis | All, censoring weights | −0.069 | −0.095 | −0.137 | −0.267 |
+| Apoptosis | Complete cases, no weights | −0.069 | −0.094 | −0.133 | −0.256 |
+| Apoptosis | Horizon inside the cut | −0.077 | −0.120 | −0.208 | −0.457 |
 
 ### S2. Per-group differences
 
@@ -264,7 +287,7 @@ Every main comparison is also computed without PNT1A bp, as a fold-influence che
 | DINOv2 | 0.159 | 0.169 | 0.086 | 0.070 |
 
 **Table S2c.** The comparators of Table 1 before the refit: the original fit on the evaluation cohort, against the refit
-without the untyped-death windows.
+without training windows that contain an untyped death.
 
 | Model | Lytic, refit | Lytic, original | Apoptosis, refit | Apoptosis, original |
 |---|:---:|:---:|:---:|:---:|
@@ -446,7 +469,7 @@ horizons (post hoc).
 |:---:|:---:|:---:|
 | 0.031 | 0.089 | 3 of 9 |
 
-**Table S6c. Complete follow-up** (recomputed by `deadahead reproduce --part sensitivity`). At 30 min, all Table 1 methods are restricted to
+**Table S6c. Follow-up inside the cut** (recomputed by `deadahead reproduce --part sensitivity`). At 30 min, all Table 1 methods are restricted to
 forecasts with complete follow-up inside the cut. Warnings and the longer horizons quoted in [S8](#s8-post-hoc-analyses) cover DeadAhead and
 elapsed time only; warnings are restricted to forecasts with four hours of follow-up inside it, with thresholds reselected on the restricted
 training forecasts. Covered: means over groups; rates: achieved alarms per
@@ -480,16 +503,24 @@ The restriction leaves out the 16 forecasts at frame 430 that count only because
 (13 apoptotic, 3 lytic). A forecast whose follow-up ends inside the horizon with no death is left
 out, so forecasts near the end of a movie count mostly when the cell dies, which favours a score that rises with time.
 
-**Table S6d. Keeping censored cells** (recomputed by `deadahead reproduce --part censoring`). As censoring here comes only
+**Table S6d. Using forecasts until censored** (recomputed by `deadahead reproduce --part censoring`). As censoring here comes only
 from movies ending, a pre-specified experiment on the evaluation cohort adds 40% administrative censoring in
-training (Handcrafted; scored against the uncensored labels). Lead of censoring-aware training (groups ahead of
-9). The first row is the primary comparison.
+training (Handcrafted; scored against the uncensored labels). A censor time is drawn per forecast, not per cell, and
+40% is the censored share of (forecast, horizon) training rows, pooled over the four horizons. Deleting removes a
+forecast at all its horizons if it is censored before any event; censoring-aware training (a per-horizon classifier) drops it
+only at the horizons where it is censored. Labels here come from the complete movies, not from the cut of the main models. Every added censor falls
+inside 240 min, so at 240 min censoring-aware training and deleting keep the same rows, and that row compares deleting with
+counting as negatives. Lead of censoring-aware training (groups ahead of 9). The first row is the primary comparison.
 
 | Censoring-aware training minus | Horizon (min) | Lytic | Meets our rule | Apoptosis | Meets our rule |
 |---|:---:|:---:|:---:|:---:|:---:|
-| Counting censored cells as negatives | 30 | +0.002 (4 of 9) | no | +0.001 (5 of 9) | no |
-| Counting censored cells as negatives | 240 | −0.049 (lower in 7 of 9) | yes, behind | −0.026 (lower in 5 of 9) | no |
-| Deleting censored cells | 30 | +0.042 (8 of 9) | yes | +0.019 (8 of 9) | no |
+| Counting censored forecasts as negatives | 30 | +0.002 (4 of 9) | no | +0.001 (5 of 9) | no |
+| Counting censored forecasts as negatives | 240 | −0.049 (lower in 7 of 9) | yes, behind | −0.026 (lower in 5 of 9) | no |
+| Deleting censored forecasts | 30 | +0.042 (8 of 9) | yes | +0.019 (8 of 9) | no |
+
+The experiment's fourth arm, the survival head on the same censored data, is not reported: an added censor can fall inside
+a 30-min bin, the code keeps that bin, and so a death later in the bin can stay a target. The command above still prints that
+arm, but no number in the paper or in this table uses it; the rows above are classifiers that hide such a death correctly.
 
 **Table S6e. Training-label audit** (reported from the paper's runs). Training windows that contain an untyped death were
 labelled event-free when VideoMAE (fine-tuned) and Fine-tuned DINOv2 were trained, a limitation DeadAhead and DeepHit
@@ -527,7 +558,7 @@ test position. Chance: the positive rate averaged over the positions.
 | VideoMAE fine-tuned on yeast, from the public VideoMAE weights | 0.0459 | +0.003 (5 of 7) | no |
 | Best simple rule | 0.0394 | +0.009 (4 of 7) | no |
 
-`deadahead yeast-score --no-sensitivity --no-lead-time` gives the numbers above in about 5 minutes with one thread on a
+`deadahead yeast-score --no-sensitivity --no-lead-time` gives the model and rule rows above (Chance is the mean over positions of `y_30` in `labels/`) in about 5 minutes with one thread on a
 shared 2.2 GHz Xeon server; `deadahead yeast-score` adds the label sensitivity and the lead times and took well over 20
 minutes there. Set `OMP_NUM_THREADS=1` on a shared machine; the LightGBM label rules always use 2 threads. `yeast-score` checks the bundle
 against its `MANIFEST.json` and returns 3 on a mismatch. The code is in `deadahead/yeast/`; the trained yeast models were
@@ -619,8 +650,7 @@ on the training groups only, as in [S3](#s3-warnings-in-detail) with only the ta
 event-free reference cell-hour in steps of 0.05 (for matching, DeadAhead and DINOv2 + handcrafted also from 0.005 to 0.800
 in steps of 0.005). Here DINOv2 + handcrafted is the baseline with its own head, as in S3. Achieved rates on the
 held-out groups differ from the target, so each row prints the achieved rate (pooled over the held-out groups) beside
-the share of deaths covered over their final 60 min (the alarm on at every forecast in that interval, among deaths tracked that
-long; mean over the 9 groups). A difference at the same target compares different achieved rates; only the
+the share of deaths covered over their final 60 min (the alarm on at every forecast in that interval, among deaths with forecasts throughout it; mean over the 9 groups). A difference at the same target compares different achieved rates; only the
 matched points below (0.309 against 0.307 pooled, lytic) compare matched alarm burdens.
 
 **Table S8c (post hoc).** Lytic death: target, achieved alarms per event-free reference cell-hour (pooled) and share of

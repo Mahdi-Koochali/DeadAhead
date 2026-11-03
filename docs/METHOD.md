@@ -27,6 +27,8 @@ pytest tests/test_history_features.py::test_no_future_frames tests/test_data_win
 |---|---|---|---|---|---|---|
 | [Okaniwa et al., 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC12582640/) | Fate after heat, C1498 cells | Bright-field, 16-frame clips ending 1, 5, 10 or 15 h after heating | Survival, death or unknown; no horizon | Leave-one-out over 4 experiments | None; undecided cells are the class "unknown" | A forecast every 30 min at four horizons; two routes; unresolved cells censored |
 | [Bürger et al., 2026](https://doi.org/10.1371/journal.pcbi.1014813) | Mitosis or apoptosis | Three fluorescent reporters | Fate, reliable "up to 8 h before the event"; no fixed horizon | Random 0.8/0.1/0.1 by trajectory | None; the main model keeps only annotated fates, and a side experiment makes undecided cells the class "neither" | Reads quantitative phase; undecided cells censored, not a class; whole groups held out |
+| [Awasthi et al., 2023](https://doi.org/10.1101/2023.11.16.567461) (preprint) | Apoptosis in CAR T-cell and NALM6 nanowells | Phase contrast and fluorescence, 2 past frames | 5 generated frames (25 min) per sliding window; a death time read from them, per nanowell | Not stated | Not mentioned | Per-cell risk at fixed horizons, not generated frames; two routes; unresolved cells censored; whole groups held out |
+| [Nematollahi et al., 2026 (BLINK)](https://arxiv.org/abs/2603.05110) (preprint) | NK-cell killing | Bright-field and fluorescence masks, NK-centred crops | Cumulative NK-induced apoptosis events per NK track; error over a 30-frame rollout | 485/29/57 tracks | Not mentioned; tracks under 1 h dropped | Follows the cell that dies and says when, not a count per killer |
 | [Vicar et al., 2020](https://doi.org/10.1038/s41598-020-58474-w) | Find the death and its route | Quantitative phase, whole track | Death time and route | One field per experiment held out; SVM scheme not stated | None | Past frames only; whole groups held out |
 
 Okaniwa T, Kryukov K, Shiroguchi K. Finding differentially expressed genes between cell fates predicted by image-based deep
@@ -36,6 +38,8 @@ cell death. *Sci. Rep.* 10, 1566 (2020).
 
 Our citation scan: of the 99 works citing the dataset paper or the mitosis-or-apoptosis paper in the table above,
 found on 18 October 2026, 18 detect or classify death after the fact and none forecasts it ahead of time.
+A keyword search of Europe PMC, arXiv and OpenAlex on 3 November 2026 found no image-based forecast of when a cell dies that
+keeps censored cells. This is a search result, not a proof of absence.
 
 ## Method in brief
 
@@ -81,14 +85,14 @@ the cell is alive, using only frames from the past 120 min, with one fixed inten
 each route (apoptosis, lytic death) the model gives the probability that the cell dies by that route within h = 30, 60,
 120 or 240 min. For a route, a death by it within the horizon is a positive; a death by the other route, or event-free
 follow-up through the horizon, is a negative; a forecast whose follow-up ends inside the horizon with no death is never
-a negative: it is left out of that horizon's AUPRC and precision, while IPA and calibration offset it through censoring
+a negative: it is left out of that horizon's AUPRC, precision and sensitivity, while IPA and calibration offset it through censoring
 weights, as pre-specified. Forecast times and training labels end at the cut, after the first 439 frames (the shortest group's length, about
 22.0 h; only Fine-tuned DINOv2 took labels past it); in training and in Table 1, deaths after the cut are censored
 there. An untyped death ends follow-up at its death time (training: see Model). Every evaluation, for every method and
 metric, uses one evaluation cohort that leaves out the 11 cells with an untyped death in the
 62 scored movies (an outcome-based exclusion).
 
-**Forecast table.** Forecasts at h = 30 min on the evaluation cohort. Count and pooled share: `--part data`; the fewest
+**Forecast table.** Table 1's forecasts at h = 30 min on the evaluation cohort. Count and pooled share: `--part data`; the fewest
 to the most forecasts in one held-out group: `--part table1` (`P` of each unit).
 
 | Forecasts at h = 30 min | Count | Pooled share | Fewest to most in one group |
@@ -107,11 +111,13 @@ pooled features, together with 112 handcrafted QPI features computed automatical
 (14 shape and phase measures, each summarised by 8 statistics over the past 120 min),
 feed a discrete-time competing-risks survival head: each forecast is expanded into eight 30-min bins (to 240 min), a
 multiclass LightGBM with the bin index as an input gives the hazard of each route per bin, and the cumulative incidence
-follows. A censored cell contributes the 30-min bins it was seen to survive in full, then leaves the risk set. This model
+follows. A censored cell contributes the 30-min bins it was seen to survive in full, then leaves the risk set. (An alive end of
+follow-up exactly on a 30-min boundary would lose one full bin; no forecast at the default cut reaches this case.) This model
 is DeadAhead.
 
-As in every model of Table 1, its likelihood weights rows so that each cell, then each movie, counts equally, favouring
-early deaths: a row weighs 1 / (forecasts of its cell), then the weights are normalised per movie. Over the 30-min rows with
+As in every head of Table 1, its likelihood weights forecasts so that each cell, then each movie, counts equally, favouring
+early deaths: a forecast weighs 1 / (forecasts of its cell), then the weights are normalised per movie. All bins of a forecast
+carry its weight, and VideoMAE (fine-tuned) multiplies these weights by class weights. Over the 30-min rows with
 a determined label, this raises the share of lytic rows from 1.97% to 4.72%
 ([`docs/figures/data/method_row_weights.csv`](figures/data/method_row_weights.csv)). At an untyped death the survival
 head ends follow-up and does not count later time as survival, a pragmatic treatment of an unrecorded route; we do not
@@ -143,7 +149,7 @@ forecasts; on these pooled scores the threshold is set for a target reference al
 0.4 alarms per event-free reference cell-hour, then applied once to the held-out group, where we report the
 pooled rate achieved. Reference forecasts have 240 min of event-free follow-up and count as 30 min of exposure each; every
 alarm counts.
-A death is covered over its final X min when the alarm is on at every forecast in that interval, among deaths tracked that long; as forecasts are 30 min apart, the first of these alarms came X-30 to X min before death. The median coverage takes each death's largest such X, 0 if none.
+A death is covered over its final X min when the alarm is on at every forecast in that interval, among deaths with forecasts throughout it; as forecasts are 30 min apart, the first of these came X-30 to X min before death. Median coverage takes each death's largest such X, 0 if none, among deaths with 4 h of forecasts; the medians of each group are then averaged over groups (S3).
 
 Table 1 labels forecasts up to the cut; the survival metrics, the fixed-horizon results and the warnings use each movie's
 complete follow-up, and a sensitivity analysis keeps only forecasts with complete follow-up inside the cut

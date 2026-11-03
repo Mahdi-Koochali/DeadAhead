@@ -11,7 +11,7 @@ import pandas as pd
 
 CAUSES = ("APOPTOSIS", "LYTIC")
 CAUSE_IX = {"APOPTOSIS": 1, "LYTIC": 2}
-#: the four training regimes: (a) drop every censored cell, (b) label censored windows event-free, (c) drop only the
+#: the four training regimes: (a) drop every censored forecast, (b) label censored windows event-free, (c) drop only the
 #: horizons whose label is unknown, (d) the discrete-time survival head with censoring in its risk set
 REGIMES = ("a_naive_drop", "b_naive_mislabel", "c_censoring_aware", "d_joint_survival")
 #: the paired contrasts, each r1 minus r2

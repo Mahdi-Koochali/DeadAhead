@@ -107,6 +107,6 @@ def format_censoring(res: dict) -> str:
                 cells.append(f"{c.lower()} {h} min {v['mean_diff']:+.3f} ({v['wins']}/{v['n_units']})" if v else
                              f"{c.lower()} {h} min -")
         out.append(f"  {key}: " + ", ".join(cells))
-    out.append("a_naive_drop: deleting censored cells; b_naive_mislabel: counting censored cells as negatives; "
-               "c_censoring_aware: censoring-aware training; d_joint_survival: the survival head")
+    out.append("a_naive_drop: deleting censored forecasts; b_naive_mislabel: counting censored forecasts as negatives; "
+               "c_censoring_aware: censoring-aware training; d_joint_survival: the survival head, not reported (S6d)")
     return "\n".join(out)

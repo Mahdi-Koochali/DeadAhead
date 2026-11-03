@@ -1,5 +1,5 @@
 """Reproduce, post hoc, the warnings of the image baseline (DINOv2 image features + handcrafted features, refit head)
-under the same training-only alarm thresholds as DeadAhead's warnings.
+with its own training-only alarm thresholds, set the same way as DeadAhead's.
 
 The thresholds come from the baseline's cross-fitted inner predictions on the training groups' reference rows (each
 outer group and seed has eight inner heads, one per training group); the held-out scores are its Table 1

@@ -7,8 +7,7 @@ predictions bundle.
                         [--out FILE] [--no-verify]
 
 Parts: data (the counts of cells, deaths and forecasts), table1 (Table 1, its chance row and the elapsed-time fit with
-and without the row weights), warnings (DeadAhead and elapsed time, Fig. 2), image-warnings (post hoc: the image
-baseline under the same thresholds), gap (post hoc: deaths 60 to 120 min ahead, forecasts whose cell died within 60 min
+and without the row weights), warnings (DeadAhead and elapsed time, Fig. 2), image-warnings (post hoc: the image baseline with its own thresholds), gap (post hoc: deaths 60 to 120 min ahead, forecasts whose cell died within 60 min
 left out), horizons (the fixed-horizon results at 30, 60, 120 and 240 min: alarms, AUPRC and the survival estimators),
 sensitivity (Table 1 at the common cut, the warnings at the common landmark and, with the horizon inputs, the
 fixed-horizon results at the common cut), decomposition (the survival head on fine-tuned against adapted video

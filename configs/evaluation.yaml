@@ -28,7 +28,7 @@ horizons:
   horizons_min: [30, 60, 120, 240]
   positivity_min_g: 0.25         # a horizon where the censoring survivor G falls below this is not scored
 image_warnings:
-  method: dinov2_handcrafted|refit       # the image baseline, under the same training-only thresholds as DeadAhead
+  method: dinov2_handcrafted|refit       # the image baseline, with its own training-only thresholds, set the same way as DeadAhead's
   inner_heads_per_outer_unit: 8          # one cross-fitted head per training group, per held-out group and seed
   last_hour_x_min: 60                    # the sustained coverage the paper quotes
 gap:
